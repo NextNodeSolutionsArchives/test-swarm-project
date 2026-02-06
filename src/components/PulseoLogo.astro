@@ -1,0 +1,48 @@
+---
+interface Props {
+  class?: string;
+  size?: "sm" | "md" | "lg";
+  showText?: boolean;
+}
+
+const { class: className = "", size = "md", showText = true } = Astro.props;
+
+const sizes = {
+  sm: { icon: 24, text: "text-lg" },
+  md: { icon: 32, text: "text-xl" },
+  lg: { icon: 40, text: "text-2xl" },
+};
+
+const s = sizes[size];
+---
+
+<a
+  href="/"
+  class:list={["flex items-center gap-2 no-underline", className]}
+  aria-label="Pulseo home"
+>
+  <svg
+    width={s.icon}
+    height={s.icon}
+    viewBox="0 0 32 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="pulseo-logo-mark"
+    aria-hidden="true"
+  >
+    <path
+      d="M8 6C8 6 8 26 8 26C8 26 14 20 20 16C14 12 8 6 8 6Z"
+      fill="#00D67E"></path>
+    <path
+      d="M14 10C14 10 14 22 14 22C14 22 18 18 22 16C18 14 14 10 14 10Z"
+      fill="#FF6B35"
+      opacity="0.8"></path>
+  </svg>
+  {
+    showText && (
+      <span class:list={["font-bold tracking-tight text-text-primary", s.text]}>
+        Pulseo
+      </span>
+    )
+  }
+</a>
