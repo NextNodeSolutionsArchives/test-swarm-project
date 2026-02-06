@@ -1,4 +1,7 @@
 ---
+import SmoothScroll from "@/components/SmoothScroll.astro";
+import CustomCursor from "@/components/CustomCursor";
+
 interface Props {
   title?: string;
   description?: string;
@@ -29,7 +32,9 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <CustomCursor client:only="react" />
     <slot />
+    <SmoothScroll />
   </body>
 </html>
 

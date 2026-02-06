@@ -1,0 +1,135 @@
+---
+---
+
+<section id="transformation" class="relative py-[var(--spacing-section-desktop)] max-md:py-[var(--spacing-section-mobile)] overflow-hidden">
+  <div class="container-content text-center">
+    <p class="text-sm font-mono text-green-primary mb-6 tracking-wider uppercase" data-transform-reveal>
+      The Shift
+    </p>
+    <h2 class="text-display gradient-text max-w-4xl mx-auto mb-12" data-transform-headline>
+      Then Pulseo steps in.
+    </h2>
+    <p class="text-subheading text-text-secondary max-w-2xl mx-auto" data-transform-reveal>
+      One platform. Zero noise. Pure flow.
+    </p>
+
+    <!-- Chaos-to-order visual -->
+    <div class="transform-visual mt-20 relative" aria-hidden="true" data-transform-visual>
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-3 max-w-3xl mx-auto" data-ordered-grid>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary"></div>
+        </div>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary"></div>
+        </div>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary"></div>
+        </div>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary opacity-70"></div>
+        </div>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary opacity-50"></div>
+        </div>
+        <div class="ordered-card glass p-4 flex items-center justify-center">
+          <div class="w-3 h-3 rounded-full bg-green-primary opacity-30"></div>
+        </div>
+      </div>
+
+      <!-- Connecting lines -->
+      <div class="connecting-line"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ordered-card {
+    aspect-ratio: 1;
+    opacity: 0;
+    transition: background 0.3s ease;
+  }
+
+  .connecting-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-green-primary), transparent);
+    transition: width 1s ease;
+  }
+
+  .connecting-line.active {
+    width: 80%;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!prefersReducedMotion) {
+    // Headline gradient reveal
+    gsap.from("[data-transform-headline]", {
+      scrollTrigger: {
+        trigger: "#transformation",
+        start: "top 65%",
+      },
+      opacity: 0,
+      scale: 0.9,
+      y: 40,
+      duration: 1.2,
+      ease: "power3.out",
+    });
+
+    // Supporting text
+    gsap.from("[data-transform-reveal]", {
+      scrollTrigger: {
+        trigger: "#transformation",
+        start: "top 65%",
+      },
+      opacity: 0,
+      y: 20,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+
+    // Ordered cards animate in
+    gsap.fromTo(
+      ".ordered-card",
+      {
+        opacity: 0,
+        scale: 0.5,
+        y: 30,
+        rotation: () => (Math.random() - 0.5) * 20,
+      },
+      {
+        scrollTrigger: {
+          trigger: "[data-transform-visual]",
+          start: "top 75%",
+        },
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        rotation: 0,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power3.out",
+        onComplete: () => {
+          document.querySelector(".connecting-line")?.classList.add("active");
+        },
+      },
+    );
+  } else {
+    document.querySelectorAll(".ordered-card").forEach((card) => {
+      (card as HTMLElement).style.opacity = "1";
+    });
+    document.querySelector(".connecting-line")?.classList.add("active");
+  }
+</script>

@@ -1,0 +1,244 @@
+---
+const acts = [
+  {
+    id: "act-1",
+    time: "8:00 AM",
+    title: "Smart Prioritization",
+    description:
+      "Pulseo auto-sorts your tasks by urgency and energy level. Your morning starts with clarity, not chaos.",
+    visual: "task-list",
+  },
+  {
+    id: "act-2",
+    time: "11:00 AM",
+    title: "Focus Mode",
+    description:
+      "Pulseo blocks distractions and batches notifications. Deep work becomes your default, not your dream.",
+    visual: "focus-timer",
+  },
+  {
+    id: "act-3",
+    time: "4:00 PM",
+    title: "Auto-Review",
+    description:
+      "Pulseo summarizes your day and prepares tomorrow. You leave work knowing exactly where you stand.",
+    visual: "dashboard",
+  },
+];
+---
+
+<section id="features" class="relative py-[var(--spacing-section-desktop)] max-md:py-[var(--spacing-section-mobile)]">
+  <div class="container-content">
+    <div class="text-center mb-20">
+      <p class="text-sm font-mono text-green-primary mb-4 tracking-wider uppercase">
+        A Day with Pulseo
+      </p>
+      <h2 class="text-heading">From chaos to flow, hour by hour.</h2>
+    </div>
+
+    <div class="space-y-32 md:space-y-40">
+      {acts.map((act, index) => (
+        <div
+          class={`feature-act grid md:grid-cols-2 gap-12 md:gap-16 items-center ${index % 2 === 1 ? "md:direction-rtl" : ""}`}
+          data-feature-act
+        >
+          <div class={`feature-content ${index % 2 === 1 ? "md:order-2 md:text-left" : ""}`}>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-surface font-mono text-sm text-green-primary border border-border">
+                {act.time}
+              </span>
+            </div>
+            <h3 class="text-heading mb-4">{act.title}</h3>
+            <p class="text-body text-text-secondary">{act.description}</p>
+          </div>
+
+          <div class={`feature-visual ${index % 2 === 1 ? "md:order-1" : ""}`} aria-hidden="true">
+            {act.visual === "task-list" && (
+              <div class="glass p-6 md:p-8">
+                <div class="flex items-center gap-2 mb-5">
+                  <div class="w-2 h-2 rounded-full bg-green-primary" />
+                  <span class="text-xs font-mono text-text-secondary">Today's Focus</span>
+                </div>
+                <div class="space-y-3" data-task-list>
+                  <div class="task-item flex items-center gap-3 p-3 rounded-lg bg-surface/50">
+                    <div class="w-4 h-4 rounded border border-orange-primary flex-shrink-0" />
+                    <span class="text-sm">Finalize Q4 strategy deck</span>
+                    <span class="ml-auto text-xs font-mono text-orange-primary">High</span>
+                  </div>
+                  <div class="task-item flex items-center gap-3 p-3 rounded-lg bg-surface/50">
+                    <div class="w-4 h-4 rounded border border-green-primary flex-shrink-0" />
+                    <span class="text-sm">Review PR #247</span>
+                    <span class="ml-auto text-xs font-mono text-green-primary">Medium</span>
+                  </div>
+                  <div class="task-item flex items-center gap-3 p-3 rounded-lg bg-surface/50">
+                    <div class="w-4 h-4 rounded border border-text-secondary flex-shrink-0" />
+                    <span class="text-sm">Update team handbook</span>
+                    <span class="ml-auto text-xs font-mono text-text-secondary">Low</span>
+                  </div>
+                  <div class="task-item flex items-center gap-3 p-3 rounded-lg bg-surface/50">
+                    <div class="w-4 h-4 rounded border border-text-secondary flex-shrink-0" />
+                    <span class="text-sm">Organize Figma files</span>
+                    <span class="ml-auto text-xs font-mono text-text-secondary">Low</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {act.visual === "focus-timer" && (
+              <div class="glass p-6 md:p-8 text-center">
+                <div class="flex items-center justify-center gap-2 mb-6">
+                  <div class="w-2 h-2 rounded-full bg-green-primary animate-pulse" />
+                  <span class="text-xs font-mono text-green-primary">Focus Mode Active</span>
+                </div>
+                <div class="focus-timer-ring relative w-40 h-40 mx-auto mb-6">
+                  <svg viewBox="0 0 120 120" class="w-full h-full">
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.05)"
+                      stroke-width="4"
+                    />
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="#00D67E"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                      stroke-dasharray="326.7"
+                      stroke-dashoffset="80"
+                      class="focus-ring"
+                      transform="rotate(-90 60 60)"
+                    />
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span class="text-3xl font-mono font-bold text-text-primary">47:23</span>
+                    <span class="text-xs text-text-secondary mt-1">remaining</span>
+                  </div>
+                </div>
+                <div class="flex justify-center gap-6 text-xs text-text-secondary">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-red-400/50" />
+                    <span>3 blocked</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-1.5 h-1.5 rounded-full bg-green-primary" />
+                    <span>0 interruptions</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {act.visual === "dashboard" && (
+              <div class="glass p-6 md:p-8">
+                <div class="flex items-center gap-2 mb-5">
+                  <div class="w-2 h-2 rounded-full bg-green-primary" />
+                  <span class="text-xs font-mono text-text-secondary">Day Summary</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3 mb-5">
+                  <div class="p-3 rounded-lg bg-surface/50 text-center">
+                    <span class="block text-xl font-mono font-bold text-green-primary">7</span>
+                    <span class="text-xs text-text-secondary">Completed</span>
+                  </div>
+                  <div class="p-3 rounded-lg bg-surface/50 text-center">
+                    <span class="block text-xl font-mono font-bold text-orange-primary">2</span>
+                    <span class="text-xs text-text-secondary">Carried</span>
+                  </div>
+                  <div class="p-3 rounded-lg bg-surface/50 text-center">
+                    <span class="block text-xl font-mono font-bold text-text-primary">12</span>
+                    <span class="text-xs text-text-secondary">Day Streak</span>
+                  </div>
+                </div>
+                <div class="p-4 rounded-lg bg-surface/30 border border-border">
+                  <p class="text-xs font-mono text-green-primary mb-2">AI Summary</p>
+                  <p class="text-sm text-text-secondary leading-relaxed">
+                    Great focus day! You completed all high-priority items. Tomorrow: 2 carried tasks + standup at 9:30.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .md\:direction-rtl {
+    direction: ltr;
+  }
+
+  .focus-ring {
+    transition: stroke-dashoffset 2s ease;
+  }
+
+  @media (max-width: 768px) {
+    .feature-act {
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!prefersReducedMotion) {
+    document.querySelectorAll("[data-feature-act]").forEach((act) => {
+      const content = act.querySelector(".feature-content");
+      const visual = act.querySelector(".feature-visual");
+
+      if (content) {
+        gsap.from(content, {
+          scrollTrigger: {
+            trigger: act,
+            start: "top 70%",
+          },
+          opacity: 0,
+          x: -30,
+          duration: 0.8,
+          ease: "power3.out",
+        });
+      }
+
+      if (visual) {
+        gsap.from(visual, {
+          scrollTrigger: {
+            trigger: act,
+            start: "top 70%",
+          },
+          opacity: 0,
+          x: 30,
+          scale: 0.95,
+          duration: 0.8,
+          ease: "power3.out",
+          delay: 0.2,
+        });
+      }
+    });
+
+    // Task list items stagger
+    const taskItems = document.querySelectorAll(".task-item");
+    if (taskItems.length > 0) {
+      gsap.from(taskItems, {
+        scrollTrigger: {
+          trigger: "[data-task-list]",
+          start: "top 75%",
+        },
+        opacity: 0,
+        x: -20,
+        stagger: 0.12,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+    }
+  }
+</script>

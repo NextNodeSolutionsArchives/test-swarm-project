@@ -1,17 +1,26 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Navbar from "@/components/Navbar.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import ProblemSection from "@/components/ProblemSection.astro";
+import TransformationSection from "@/components/TransformationSection.astro";
+import FeatureStorytelling from "@/components/FeatureStorytelling.astro";
+import StatsSection from "@/components/StatsSection.astro";
+import TestimonialsSection from "@/components/TestimonialsSection.astro";
+import FinalCTA from "@/components/FinalCTA.astro";
+import Footer from "@/components/Footer.astro";
 ---
 
 <BaseLayout>
+  <Navbar />
   <main>
-    <section id="hero">
-      <div class="container-content">
-        <h1 class="text-display">Your workflow, in flow.</h1>
-        <p class="text-subheading text-text-secondary">
-          Pulseo learns your patterns, automates the busywork, and keeps you in
-          your zone.
-        </p>
-      </div>
-    </section>
+    <HeroSection />
+    <ProblemSection />
+    <TransformationSection />
+    <FeatureStorytelling />
+    <StatsSection />
+    <TestimonialsSection />
+    <FinalCTA />
   </main>
+  <Footer />
 </BaseLayout>

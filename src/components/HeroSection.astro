@@ -1,0 +1,271 @@
+---
+import PulseoLogo from "./PulseoLogo.astro";
+---
+
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Gradient orbs background -->
+  <div class="gradient-orbs" aria-hidden="true">
+    <div class="orb orb-green"></div>
+    <div class="orb orb-orange"></div>
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-teal"></div>
+  </div>
+
+  <!-- Floating UI mockup cards -->
+  <div class="floating-cards" aria-hidden="true" data-parallax-container>
+    <div class="floating-card glass" data-parallax="0.02" style="top: 15%; left: 8%;">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-2 h-2 rounded-full bg-green-primary"></div>
+        <span class="text-xs font-mono text-text-secondary">Task Queue</span>
+      </div>
+      <div class="space-y-1.5">
+        <div class="h-2 w-20 rounded bg-surface-hover"></div>
+        <div class="h-2 w-16 rounded bg-surface-hover"></div>
+        <div class="h-2 w-24 rounded bg-surface-hover"></div>
+      </div>
+    </div>
+    <div class="floating-card glass" data-parallax="0.03" style="top: 20%; right: 6%;">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-2 h-2 rounded-full bg-orange-primary"></div>
+        <span class="text-xs font-mono text-text-secondary">Focus Score</span>
+      </div>
+      <span class="text-2xl font-bold text-green-primary font-mono">92%</span>
+    </div>
+    <div class="floating-card glass" data-parallax="0.015" style="bottom: 22%; left: 5%;">
+      <div class="flex items-center gap-2 mb-2">
+        <div class="w-2 h-2 rounded-full bg-green-primary"></div>
+        <span class="text-xs font-mono text-text-secondary">AI Summary</span>
+      </div>
+      <div class="space-y-1.5">
+        <div class="h-2 w-28 rounded bg-surface-hover"></div>
+        <div class="h-2 w-20 rounded bg-surface-hover"></div>
+      </div>
+    </div>
+    <div class="floating-card glass" data-parallax="0.025" style="bottom: 18%; right: 10%;">
+      <div class="flex items-center gap-2 mb-1">
+        <svg class="w-3 h-3 text-green-primary" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="text-xs text-text-secondary">3 tasks done</span>
+      </div>
+      <div class="flex gap-1 mt-1">
+        <div class="h-1 flex-1 rounded bg-green-primary"></div>
+        <div class="h-1 flex-1 rounded bg-green-primary"></div>
+        <div class="h-1 flex-1 rounded bg-green-primary"></div>
+        <div class="h-1 flex-1 rounded bg-surface-hover"></div>
+        <div class="h-1 flex-1 rounded bg-surface-hover"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="container-content relative z-10 text-center">
+    <div class="hero-logo mb-8 flex justify-center" data-hero-logo>
+      <PulseoLogo size="lg" showText={false} />
+    </div>
+
+    <h1 class="text-display mb-6 hero-headline" data-hero-headline>
+      Your workflow, in flow.
+    </h1>
+
+    <p class="text-subheading text-text-secondary max-w-2xl mx-auto mb-10 hero-sub" data-hero-sub>
+      Pulseo learns your patterns, automates the busywork, and keeps you in your zone.
+    </p>
+
+    <div class="hero-cta" data-hero-cta>
+      <a href="/dashboard" class="cta-button" data-cursor-hover>
+        Go to Dashboard
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+      <p class="text-sm text-text-secondary mt-4 hero-no-cc" data-hero-nocc>
+        No credit card required
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gradient-orbs {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+  }
+
+  .orb-green {
+    width: 600px;
+    height: 600px;
+    background: #00D67E;
+    top: -10%;
+    left: -5%;
+    opacity: 0.25;
+  }
+
+  .orb-orange {
+    width: 500px;
+    height: 500px;
+    background: #FF6B35;
+    top: 30%;
+    right: -10%;
+    opacity: 0.2;
+  }
+
+  .orb-purple {
+    width: 400px;
+    height: 400px;
+    background: #8B5CF6;
+    bottom: -5%;
+    left: 30%;
+    opacity: 0.15;
+  }
+
+  .orb-teal {
+    width: 350px;
+    height: 350px;
+    background: #06B6D4;
+    top: 50%;
+    left: 50%;
+    opacity: 0.12;
+  }
+
+  .floating-cards {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .floating-card {
+    position: absolute;
+    padding: 16px;
+    min-width: 120px;
+    opacity: 0.7;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-dark-base);
+    background: var(--color-green-primary);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 0 30px rgba(0, 214, 126, 0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0, 214, 126, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .floating-cards {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!prefersReducedMotion) {
+    // Animate gradient orbs with slow drift
+    gsap.to(".orb-green", {
+      x: 80,
+      y: 40,
+      duration: 12,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+    gsap.to(".orb-orange", {
+      x: -60,
+      y: -30,
+      duration: 15,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+    gsap.to(".orb-purple", {
+      x: 50,
+      y: -40,
+      duration: 18,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+    gsap.to(".orb-teal", {
+      x: -40,
+      y: 30,
+      duration: 14,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+
+    // Hero entrance timeline
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.from("[data-hero-logo]", {
+      opacity: 0,
+      scale: 0.8,
+      duration: 1,
+    })
+    .from("[data-hero-headline]", {
+      opacity: 0,
+      y: 40,
+      duration: 1,
+    }, "-=0.5")
+    .from("[data-hero-sub]", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+    }, "-=0.4")
+    .from("[data-hero-cta]", {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+    }, "-=0.3")
+    .from("[data-hero-nocc]", {
+      opacity: 0,
+      duration: 0.6,
+    }, "-=0.2");
+
+    // Floating cards parallax on mouse move
+    const parallaxContainer = document.querySelector("[data-parallax-container]");
+    if (parallaxContainer) {
+      document.addEventListener("mousemove", (e) => {
+        const cards = document.querySelectorAll("[data-parallax]");
+        cards.forEach((card) => {
+          const speed = parseFloat((card as HTMLElement).dataset.parallax || "0");
+          const x = (window.innerWidth / 2 - e.clientX) * speed;
+          const y = (window.innerHeight / 2 - e.clientY) * speed;
+          gsap.to(card, { x, y, duration: 0.6, ease: "power2.out" });
+        });
+      });
+    }
+
+    // Floating card gentle bob animation
+    document.querySelectorAll(".floating-card").forEach((card, i) => {
+      gsap.to(card, {
+        y: "+=10",
+        duration: 3 + i * 0.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: i * 0.3,
+      });
+    });
+  }
+</script>
