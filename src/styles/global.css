@@ -116,3 +116,59 @@ body {
   margin-inline: auto;
   padding-inline: 24px;
 }
+
+/* ===== Dashboard Responsive ===== */
+
+/* Kanban scroll container */
+.kanban-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.kanban-scroll > * {
+  scroll-snap-align: start;
+}
+
+/* Mobile: single column kanban, stacked layout */
+@media (max-width: 639px) {
+  .kanban-scroll {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .kanban-scroll > * {
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Tablet: 2-column kanban */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .kanban-scroll > * {
+    min-width: calc(50% - 8px) !important;
+    max-width: calc(50% - 8px) !important;
+  }
+}
+
+/* Desktop: full kanban with all columns visible */
+@media (min-width: 1025px) {
+  .container-content.dashboard-wide {
+    max-width: 1400px;
+  }
+}
+
+/* Toast slide-in animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}

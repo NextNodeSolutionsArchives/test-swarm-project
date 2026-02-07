@@ -10,8 +10,8 @@ import {
 } from "@/lib/api-client";
 import Toolbar from "./Toolbar";
 import FilterTabs from "./FilterTabs";
-import TaskCard from "./TaskCard";
 import TaskForm from "./TaskForm";
+import SortableListView from "./SortableListView";
 import EmptyState from "./EmptyState";
 import Toast, { type ToastItem } from "./Toast";
 import KanbanBoard from "./KanbanBoard";
@@ -212,24 +212,23 @@ export default function DashboardApp() {
             onUpdateTask={handleUpdate}
             onDeleteTask={handleDelete}
             onColumnsChange={setColumns}
+            onTasksChange={setTasks}
           />
         ) : (
-          <div className="space-y-2">
-            {filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                columns={columns}
-                onUpdate={handleUpdate}
-                onDelete={handleDelete}
-              />
-            ))}
+          <>
+            <SortableListView
+              tasks={filteredTasks}
+              columns={columns}
+              onUpdateTask={handleUpdate}
+              onDeleteTask={handleDelete}
+              onTasksChange={setTasks}
+            />
             {filteredTasks.length === 0 && (debouncedSearch || activeFilter) && (
               <div className="text-center py-12 text-text-secondary">
                 No tasks match your search or filter.
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
 

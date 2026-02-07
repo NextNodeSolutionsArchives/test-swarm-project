@@ -41,10 +41,11 @@ describe("Iteration 2 — Task CRUD UI", () => {
       const app = readFileSync(join(ROOT, "src/components/dashboard/DashboardApp.tsx"), "utf-8");
       expect(app).toContain("Toolbar");
       expect(app).toContain("FilterTabs");
-      expect(app).toContain("TaskCard");
       expect(app).toContain("TaskForm");
       expect(app).toContain("EmptyState");
       expect(app).toContain("Toast");
+      // TaskCard is used indirectly via SortableListView and KanbanBoard
+      expect(app).toContain("SortableListView");
     });
 
     it("should fetch tasks and columns on mount", () => {

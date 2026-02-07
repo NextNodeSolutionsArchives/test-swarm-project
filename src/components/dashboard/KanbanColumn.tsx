@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import type { Task, Column } from "@/lib/types";
-import TaskCard from "./TaskCard";
+import SortableTaskCard from "./SortableTaskCard";
 import TaskForm from "./TaskForm";
 
 interface KanbanColumnProps {
@@ -31,6 +33,11 @@ export default function KanbanColumn({
   onChangeColumnColor,
   onDeleteColumn,
 }: KanbanColumnProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `column-${column.statusValue}`,
+    data: { type: "column", statusValue: column.statusValue },
+  });
+
   const [isAdding, setIsAdding] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(column.name);
@@ -182,17 +189,24 @@ export default function KanbanColumn({
         </div>
       )}
 
-      {/* Task Cards */}
-      <div className="space-y-2 flex-1 min-h-[100px]">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            columns={allColumns}
-            onUpdate={onUpdateTask}
-            onDelete={onDeleteTask}
-          />
-        ))}
+      {/* Task Cards — droppable + sortable */}
+      <div
+        ref={setNodeRef}
+        className={`space-y-2 flex-1 min-h-[100px] rounded-lg p-1 transition-colors ${
+          isOver ? "bg-green-primary/10 ring-1 ring-green-primary/30" : ""
+        }`}
+      >
+        <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+          {tasks.map((task) => (
+            <SortableTaskCard
+              key={task.id}
+              task={task}
+              columns={allColumns}
+              onUpdate={onUpdateTask}
+              onDelete={onDeleteTask}
+            />
+          ))}
+        </SortableContext>
       </div>
     </div>
   );
