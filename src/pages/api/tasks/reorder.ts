@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getUserIdFromRequest, unauthorizedResponse } from "@/lib/auth";
+import { getAuthenticatedUser, unauthorizedResponse } from "@/lib/auth-guard";
 import { jsonResponse, errorResponse, parseJsonBody } from "@/lib/api-utils";
 import { reorderTasks } from "@/lib/tasks-repository";
 
@@ -11,14 +11,14 @@ interface ReorderBody {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
   const body = await parseJsonBody<ReorderBody>(request);
   if (!body || !Array.isArray(body.taskIds)) {
     return errorResponse("taskIds array is required", 400);
   }
 
-  reorderTasks(userId, body.taskIds, body.status);
+  reorderTasks(auth.userId, body.taskIds, body.status);
   return jsonResponse({ success: true });
 };

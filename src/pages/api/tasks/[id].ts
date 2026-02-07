@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getUserIdFromRequest, unauthorizedResponse } from "@/lib/auth";
+import { getAuthenticatedUser, unauthorizedResponse } from "@/lib/auth-guard";
 import { jsonResponse, errorResponse, parseJsonBody } from "@/lib/api-utils";
 import { getTaskById, updateTask, softDeleteTask } from "@/lib/tasks-repository";
 import { getColumnByStatus } from "@/lib/columns-repository";
@@ -9,20 +9,20 @@ import type { UpdateTaskInput } from "@/lib/types";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const task = getTaskById(params.id!, userId);
+  const task = getTaskById(params.id!, auth.userId);
   if (!task) return errorResponse("Task not found", 404);
 
   return jsonResponse({ task });
 };
 
 export const PUT: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const existing = getTaskById(params.id!, userId);
+  const existing = getTaskById(params.id!, auth.userId);
   if (!existing) return errorResponse("Task not found", 404);
 
   const body = await parseJsonBody<UpdateTaskInput>(request);
@@ -44,21 +44,21 @@ export const PUT: APIRoute = async ({ params, request }) => {
 
   // Validate status if provided
   if (body.status !== undefined) {
-    const column = getColumnByStatus(body.status, userId);
+    const column = getColumnByStatus(body.status, auth.userId);
     if (!column) return errorResponse("Status does not match any column", 400);
   }
 
-  const task = updateTask(params.id!, userId, body);
+  const task = updateTask(params.id!, auth.userId, body);
   if (!task) return errorResponse("Task not found", 404);
 
   return jsonResponse({ task });
 };
 
 export const DELETE: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const result = softDeleteTask(params.id!, userId);
+  const result = softDeleteTask(params.id!, auth.userId);
   if (!result) return errorResponse("Task not found", 404);
 
   return jsonResponse(result);

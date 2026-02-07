@@ -1,6 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AuthForm from "@/components/AuthForm";
+import { getAuthenticatedUser } from "@/lib/auth-guard";
+
+export const prerender = false;
+
+const auth = await getAuthenticatedUser(Astro.request);
+if (auth) {
+  return Astro.redirect("/dashboard", 302);
+}
 ---
 
 <BaseLayout title="Pulseo — Sign in" description="Sign in or create a Pulseo account.">
