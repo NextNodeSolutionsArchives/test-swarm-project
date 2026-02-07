@@ -14,6 +14,7 @@ import TaskCard from "./TaskCard";
 import TaskForm from "./TaskForm";
 import EmptyState from "./EmptyState";
 import Toast, { type ToastItem } from "./Toast";
+import KanbanBoard from "./KanbanBoard";
 
 function getInitialViewMode(): "list" | "kanban" {
   // URL param takes precedence
@@ -203,6 +204,15 @@ export default function DashboardApp() {
 
         {showEmptyState ? (
           <EmptyState onCreateTask={() => setIsCreating(true)} />
+        ) : viewMode === "kanban" ? (
+          <KanbanBoard
+            tasks={filteredTasks}
+            columns={columns}
+            onCreateTask={handleCreate}
+            onUpdateTask={handleUpdate}
+            onDeleteTask={handleDelete}
+            onColumnsChange={setColumns}
+          />
         ) : (
           <div className="space-y-2">
             {filteredTasks.map((task) => (
