@@ -9,7 +9,11 @@ function fileExists(path: string) {
 }
 
 function readFile(path: string) {
-  return readFileSync(resolve(root, path), "utf-8");
+  // With Node SSR adapter, static pages go to dist/client/
+  const primary = resolve(root, path);
+  if (existsSync(primary)) return readFileSync(primary, "utf-8");
+  const ssr = resolve(root, path.replace("dist/", "dist/client/"));
+  return readFileSync(ssr, "utf-8");
 }
 
 // ============================================================
@@ -503,10 +507,13 @@ describe("FR-13: Navigation Bar", () => {
     expect(html).toContain("Pricing");
   });
 
-  it("has CTA button linking to /dashboard", () => {
+  it("has auth-aware CTA (now via React NavbarAuth component)", () => {
     const html = readFile("src/components/Navbar.astro");
-    expect(html).toContain('href="/dashboard"');
-    expect(html).toContain("Dashboard");
+    expect(html).toContain("NavbarAuth");
+    // Dashboard link is now in the React component NavbarAuth.tsx
+    const authComponent = readFile("src/components/NavbarAuth.tsx");
+    expect(authComponent).toContain("/dashboard");
+    expect(authComponent).toContain("Dashboard");
   });
 
   it("has scroll-triggered glassmorphism background", () => {
@@ -607,7 +614,7 @@ describe("Page Assembly", () => {
 // ============================================================
 describe("Build Output", () => {
   it("dist/index.html exists", () => {
-    expect(fileExists("dist/index.html")).toBe(true);
+    expect(fileExists("dist/index.html") || fileExists("dist/client/index.html")).toBe(true);
   });
 
   it("dist/index.html has proper HTML structure", () => {

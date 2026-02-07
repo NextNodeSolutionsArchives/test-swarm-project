@@ -1,0 +1,10 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DashboardApp from "@/components/dashboard/DashboardApp";
+
+export const prerender = false;
+---
+
+<BaseLayout title="Dashboard — Pulseo" description="Manage your tasks with Pulseo">
+  <DashboardApp client:only="react" />
+</BaseLayout>

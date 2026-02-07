@@ -155,7 +155,8 @@ describe("FR-1: Astro Project Scaffolding", () => {
     });
 
     it("generated index.html", () => {
-      expect(fileExists("dist/index.html")).toBe(true);
+      // With Node SSR adapter, static pages go to dist/client/
+      expect(fileExists("dist/client/index.html") || fileExists("dist/index.html")).toBe(true);
     });
   });
 });
