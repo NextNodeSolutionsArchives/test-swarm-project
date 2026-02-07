@@ -196,3 +196,53 @@ Connected authentication with dashboard. All routes protected by JWT auth, tasks
 2. Cookie parsing via regex from Cookie header (no additional deps)
 3. Module-level `isRetry` flag prevents infinite refresh loops
 4. Column seeding in GET /api/columns (idempotent, transaction-safe)
+
+---
+
+# Delivery Report — DRY UI Refactoring
+
+## Summary
+Refactored the entire Pulseo UI codebase for DRY principles. Extracted 11 reusable UI components, centralized animation utilities, migrated all icons to Lucide, and eliminated duplicate patterns across 17 components. Zero visual regression.
+
+## Spec Coverage: 8/8
+
+| FR | Title | Status |
+|----|-------|--------|
+| FR-1 | Shared UI Component Library | done |
+| FR-2 | Icon Migration to Lucide | done |
+| FR-3 | Animation Utilities | done |
+| FR-4 | Shared Utility Functions | done |
+| FR-5 | Design Token Consolidation | done |
+| FR-6 | CSS Cleanup | done |
+| FR-7 | Dropdown/Menu Factorization | done |
+| FR-8 | Component Refactoring | done |
+
+## Iteration: 1
+
+| Iter | Commit | FRs | Tests |
+|------|--------|-----|-------|
+| 1 | f85e118 | FR-1 through FR-8 | 444 passing (20 tests updated) |
+
+## New Files (14)
+- `src/components/ui/Button.{astro,tsx}` — variant (primary/secondary/icon), size (sm/md/lg), href support
+- `src/components/ui/Card.{astro,tsx}` — glassmorphism wrapper with padding variants
+- `src/components/ui/Input.tsx` — input + Textarea export, error state, icon support
+- `src/components/ui/StatusBadge.tsx` — pill badge with auto-opacity background
+- `src/components/ui/Spinner.tsx` — loading spinner with size variants
+- `src/components/ui/Avatar.tsx` — initials-based avatar with gradient
+- `src/components/ui/GradientOrbs.astro` — preset gradient backgrounds (hero/cta/auth)
+- `src/components/ui/DropdownMenu.tsx` — click-outside + Escape handling
+- `src/utils/animations.ts` — scrollFadeIn, scrollStagger, scrollScale, prefersReducedMotion, registerGSAP
+- `src/utils/date.ts` — getRelativeTime
+- `src/utils/column-helpers.ts` — getColumnColor, getColumnName
+
+## Deleted Files (1)
+- `src/utils/design-tokens.ts` — CSS variables now sole source of truth
+
+## Dependencies
+- Added: `lucide-react`, `@lucide/astro`
+
+## Metrics
+- Lines: +1188 / -784
+- Tests: 444 passing, 0 failing
+- Build: passing
