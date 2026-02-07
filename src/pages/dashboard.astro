@@ -1,10 +1,18 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import DashboardApp from "@/components/dashboard/DashboardApp";
+import { getAuthenticatedUser } from "@/lib/auth-guard";
 
 export const prerender = false;
+
+const auth = await getAuthenticatedUser(Astro.request);
+if (!auth) {
+  return Astro.redirect("/auth", 302);
+}
+
+const { username } = auth;
 ---
 
 <BaseLayout title="Dashboard — Pulseo" description="Manage your tasks with Pulseo">
-  <DashboardApp client:only="react" />
+  <DashboardApp client:only="react" username={username} />
 </BaseLayout>

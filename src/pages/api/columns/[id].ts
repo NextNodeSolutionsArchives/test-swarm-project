@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getUserIdFromRequest, unauthorizedResponse } from "@/lib/auth";
+import { getAuthenticatedUser, unauthorizedResponse } from "@/lib/auth-guard";
 import { jsonResponse, errorResponse, parseJsonBody } from "@/lib/api-utils";
 import { getColumnById, updateColumn, deleteColumn } from "@/lib/columns-repository";
 import { sanitizeColumnName, sanitizeStatusValue } from "@/lib/sanitize";
@@ -8,20 +8,20 @@ import type { UpdateColumnInput } from "@/lib/types";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const column = getColumnById(params.id!, userId);
+  const column = getColumnById(params.id!, auth.userId);
   if (!column) return errorResponse("Column not found", 404);
 
   return jsonResponse({ column });
 };
 
 export const PUT: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const existing = getColumnById(params.id!, userId);
+  const existing = getColumnById(params.id!, auth.userId);
   if (!existing) return errorResponse("Column not found", 404);
 
   const body = await parseJsonBody<UpdateColumnInput>(request);
@@ -42,7 +42,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
   }
 
   try {
-    const column = updateColumn(params.id!, userId, body);
+    const column = updateColumn(params.id!, auth.userId, body);
     if (!column) return errorResponse("Column not found", 404);
     return jsonResponse({ column });
   } catch (err) {
@@ -51,10 +51,10 @@ export const PUT: APIRoute = async ({ params, request }) => {
 };
 
 export const DELETE: APIRoute = async ({ params, request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
-  const result = deleteColumn(params.id!, userId);
+  const result = deleteColumn(params.id!, auth.userId);
   if (!result.success) {
     const status = result.error === "Column not found" ? 404 : 400;
     return errorResponse(result.error!, status);

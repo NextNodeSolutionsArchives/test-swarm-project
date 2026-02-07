@@ -102,7 +102,7 @@ describe("Iteration 1 — API Endpoints & Repositories", () => {
       const route = readFileSync(join(ROOT, "src/pages/api/tasks/index.ts"), "utf-8");
       expect(route).toContain("export const GET");
       expect(route).toContain("prerender = false");
-      expect(route).toContain("getUserIdFromRequest");
+      expect(route).toContain("getAuthenticatedUser");
     });
 
     it("POST /api/tasks should validate title and status", () => {
@@ -189,7 +189,7 @@ describe("Iteration 1 — API Endpoints & Repositories", () => {
       ];
       for (const file of files) {
         const content = readFileSync(join(ROOT, file), "utf-8");
-        expect(content).toContain("getUserIdFromRequest");
+        expect(content).toContain("getAuthenticatedUser");
         expect(content).toContain("unauthorizedResponse");
       }
     });
@@ -202,7 +202,7 @@ describe("Iteration 1 — API Endpoints & Repositories", () => {
       ];
       for (const file of files) {
         const content = readFileSync(join(ROOT, file), "utf-8");
-        expect(content).toContain("getUserIdFromRequest");
+        expect(content).toContain("getAuthenticatedUser");
         expect(content).toContain("unauthorizedResponse");
       }
     });

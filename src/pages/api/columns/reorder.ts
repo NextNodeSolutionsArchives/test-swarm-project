@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getUserIdFromRequest, unauthorizedResponse } from "@/lib/auth";
+import { getAuthenticatedUser, unauthorizedResponse } from "@/lib/auth-guard";
 import { jsonResponse, errorResponse, parseJsonBody } from "@/lib/api-utils";
 import { reorderColumns } from "@/lib/columns-repository";
 
@@ -10,14 +10,14 @@ interface ReorderBody {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const userId = getUserIdFromRequest(request);
-  if (!userId) return unauthorizedResponse();
+  const auth = await getAuthenticatedUser(request);
+  if (!auth) return unauthorizedResponse();
 
   const body = await parseJsonBody<ReorderBody>(request);
   if (!body || !Array.isArray(body.columnIds)) {
     return errorResponse("columnIds array is required", 400);
   }
 
-  reorderColumns(userId, body.columnIds);
+  reorderColumns(auth.userId, body.columnIds);
   return jsonResponse({ success: true });
 };

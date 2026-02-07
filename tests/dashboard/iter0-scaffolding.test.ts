@@ -62,22 +62,21 @@ describe("Iteration 0 — Dashboard Scaffolding", () => {
     });
   });
 
-  describe("Auth Feature Flag", () => {
-    it("should export auth utility functions", () => {
-      const authFile = readFileSync(join(ROOT, "src/lib/auth.ts"), "utf-8");
-      expect(authFile).toContain("export function getUserIdFromRequest");
-      expect(authFile).toContain("export function isAuthEnabled");
-      expect(authFile).toContain("export function getMockUserId");
+  describe("Auth Guard (JWT-based)", () => {
+    it("should export getAuthenticatedUser and unauthorizedResponse", () => {
+      const authFile = readFileSync(join(ROOT, "src/lib/auth-guard.ts"), "utf-8");
+      expect(authFile).toContain("export async function getAuthenticatedUser");
+      expect(authFile).toContain("export function unauthorizedResponse");
     });
 
-    it("should use mock-user-001 as default mock user", () => {
-      const authFile = readFileSync(join(ROOT, "src/lib/auth.ts"), "utf-8");
-      expect(authFile).toContain("mock-user-001");
+    it("should verify JWT via verifyAccessToken", () => {
+      const authFile = readFileSync(join(ROOT, "src/lib/auth-guard.ts"), "utf-8");
+      expect(authFile).toContain("verifyAccessToken");
     });
 
-    it("should check AUTH_ENABLED environment variable", () => {
-      const authFile = readFileSync(join(ROOT, "src/lib/auth.ts"), "utf-8");
-      expect(authFile).toContain("AUTH_ENABLED");
+    it("should use pulseo_access cookie for authentication", () => {
+      const authFile = readFileSync(join(ROOT, "src/lib/auth-guard.ts"), "utf-8");
+      expect(authFile.includes("pulseo_access") || authFile.includes("COOKIE_ACCESS")).toBe(true);
     });
   });
 
@@ -141,9 +140,9 @@ describe("Iteration 0 — Dashboard Scaffolding", () => {
   });
 
   describe("Environment Declarations", () => {
-    it("should declare AUTH_ENABLED in ImportMetaEnv", () => {
+    it("should declare JWT_SECRET in ProcessEnv", () => {
       const envDts = readFileSync(join(ROOT, "src/env.d.ts"), "utf-8");
-      expect(envDts).toContain("AUTH_ENABLED");
+      expect(envDts).toContain("JWT_SECRET");
     });
   });
 
@@ -151,7 +150,7 @@ describe("Iteration 0 — Dashboard Scaffolding", () => {
     const expectedFiles = [
       "src/lib/types.ts",
       "src/lib/db.ts",
-      "src/lib/auth.ts",
+      "src/lib/auth-guard.ts",
       "src/lib/sanitize.ts",
       "src/lib/api-utils.ts",
       "src/env.d.ts",

@@ -151,3 +151,48 @@ src/pages/dashboard.astro — Dashboard route
 
 ## Dependencies Added
 - @dnd-kit/core, @dnd-kit/sortable, sonner
+
+---
+
+# Delivery Report — Auth-Dashboard Integration
+
+## Summary
+Connected authentication with dashboard. All routes protected by JWT auth, tasks scoped per user (mock user removed), full login/logout flow with silent token refresh.
+
+## Spec Coverage: 10/10
+
+| FR | Title | Status |
+|----|-------|--------|
+| FR-1 | Remove AUTH_ENABLED feature flag | done |
+| FR-2 | Protect /dashboard with 302 redirect | done |
+| FR-3 | Protect API routes with 401 JSON | done |
+| FR-4 | JWT-based auth-guard utility | done |
+| FR-5 | Auto-seed default columns for new users | done |
+| FR-6 | Dashboard header bar (username + logout) | done |
+| FR-7 | Silent token refresh with retry | done |
+| FR-8 | Redirect to /dashboard after login | done |
+| FR-9 | Redirect to /auth after logout | done |
+| FR-10 | Redirect authenticated /auth visitors to /dashboard | done |
+
+## Iterations: 2
+
+| Iter | Commit | FRs | Tests |
+|------|--------|-----|-------|
+| 1 | be7e3cc | FR-1,2,3,4,10 | 16 |
+| 2 | 5dffa9a | FR-5,6,7,8,9 | 16 new + 3 updated |
+
+## Test Results
+- Total: 444 passing, 0 failing
+- New test files: 2 (iteration-1.test.ts, iteration-2.test.ts)
+- Updated test files: 3 (iter0-scaffolding, iter1-api-endpoints, auth-page)
+
+## Key Changes
+- **Created**: `src/lib/auth-guard.ts` — JWT verification from cookies
+- **Deleted**: `src/lib/auth.ts` — mock user utility
+- **Modified**: 7 API routes, dashboard.astro, auth.astro, DashboardApp.tsx, AuthForm.tsx, api-client.ts, global.css, env.d.ts
+
+## Architecture Decisions
+1. Kept Astro file-based routes (no migration to Hono) — minimized disruption
+2. Cookie parsing via regex from Cookie header (no additional deps)
+3. Module-level `isRetry` flag prevents infinite refresh loops
+4. Column seeding in GET /api/columns (idempotent, transaction-safe)
