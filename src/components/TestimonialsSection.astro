@@ -1,0 +1,92 @@
+---
+const testimonials = [
+  {
+    quote:
+      "Pulseo replaced 4 tools for me. My mornings used to be a mess of tabs and notifications. Now I open one app and just... start working.",
+    name: "Sarah Chen",
+    role: "Head of Product",
+    company: "Meridian Labs",
+    gradientFrom: "#00D67E",
+    gradientTo: "#06B6D4",
+  },
+  {
+    quote:
+      "The focus mode is game-changing. I went from 2 hours of deep work a week to 2 hours a day. My team noticed the difference in a week.",
+    name: "Marcus Rivera",
+    role: "Senior Engineer",
+    company: "Helios Cloud",
+    gradientFrom: "#FF6B35",
+    gradientTo: "#F59E0B",
+  },
+  {
+    quote:
+      "The AI summary alone is worth it. Every evening I get a clear picture of what happened and what is next. No more Sunday night anxiety.",
+    name: "Aisha Patel",
+    role: "Design Director",
+    company: "Canopy Studio",
+    gradientFrom: "#8B5CF6",
+    gradientTo: "#EC4899",
+  },
+];
+---
+
+<section id="testimonials" class="relative py-[var(--spacing-section-desktop)] max-md:py-[var(--spacing-section-mobile)]">
+  <div class="container-content">
+    <div class="text-center mb-16">
+      <p class="text-sm font-mono text-green-primary mb-4 tracking-wider uppercase">
+        Testimonials
+      </p>
+      <h2 class="text-heading">Loved by teams everywhere.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+      {testimonials.map((t) => (
+        <div class="glass p-6 md:p-8 flex flex-col testimonial-card" data-testimonial>
+          <div class="text-2xl text-text-secondary/30 mb-4 leading-none" aria-hidden="true">
+            &#x201C;
+          </div>
+          <blockquote class="text-body text-text-secondary flex-1 mb-6">
+            {t.quote}
+          </blockquote>
+          <div class="flex items-center gap-3 mt-auto">
+            <div
+              class="w-10 h-10 rounded-full flex-shrink-0"
+              style={`background: linear-gradient(135deg, ${t.gradientFrom}, ${t.gradientTo})`}
+              aria-hidden="true"
+            />
+            <div>
+              <p class="text-sm font-semibold text-text-primary">{t.name}</p>
+              <p class="text-xs text-text-secondary">
+                {t.role}, {t.company}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!prefersReducedMotion) {
+    gsap.from("[data-testimonial]", {
+      scrollTrigger: {
+        trigger: "#testimonials",
+        start: "top 70%",
+      },
+      opacity: 0,
+      y: 40,
+      scale: 0.95,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+  }
+</script>

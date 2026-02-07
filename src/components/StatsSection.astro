@@ -1,0 +1,88 @@
+---
+const stats = [
+  { value: 2.4, suffix: " hrs", label: "Saved per day", decimals: 1 },
+  { value: 93, suffix: "%", label: "User satisfaction", decimals: 0 },
+  { value: 50, suffix: "K+", label: "Teams worldwide", decimals: 0 },
+  { value: 4.9, suffix: "/5", label: "Average rating", decimals: 1 },
+];
+---
+
+<section id="stats" class="relative py-[var(--spacing-section-desktop)] max-md:py-[var(--spacing-section-mobile)]">
+  <div class="container-content">
+    <div class="glass p-8 md:p-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+        {stats.map((stat) => (
+          <div class="text-center" data-stat>
+            <div class="flex items-baseline justify-center gap-0.5 mb-2">
+              <span
+                class="text-4xl md:text-5xl font-mono font-bold text-text-primary stat-value"
+                data-count-to={stat.value}
+                data-decimals={stat.decimals}
+              >
+                0
+              </span>
+              <span class="text-xl md:text-2xl font-mono font-bold text-green-primary">
+                {stat.suffix}
+              </span>
+            </div>
+            <p class="text-sm text-text-secondary">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const statValues = document.querySelectorAll(".stat-value");
+
+  if (!prefersReducedMotion) {
+    statValues.forEach((el) => {
+      const target = parseFloat((el as HTMLElement).dataset.countTo || "0");
+      const decimals = parseInt((el as HTMLElement).dataset.decimals || "0", 10);
+
+      ScrollTrigger.create({
+        trigger: "#stats",
+        start: "top 75%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, {
+            innerText: target,
+            duration: 2,
+            ease: "power2.out",
+            snap: decimals === 0 ? { innerText: 1 } : {},
+            onUpdate() {
+              const current = parseFloat(el.textContent || "0");
+              el.textContent = current.toFixed(decimals);
+            },
+          });
+        },
+      });
+    });
+
+    gsap.from("[data-stat]", {
+      scrollTrigger: {
+        trigger: "#stats",
+        start: "top 75%",
+      },
+      opacity: 0,
+      y: 30,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: "power3.out",
+    });
+  } else {
+    statValues.forEach((el) => {
+      const target = parseFloat((el as HTMLElement).dataset.countTo || "0");
+      const decimals = parseInt((el as HTMLElement).dataset.decimals || "0", 10);
+      el.textContent = target.toFixed(decimals);
+    });
+  }
+</script>
