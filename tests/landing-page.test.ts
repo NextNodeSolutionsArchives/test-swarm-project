@@ -9,7 +9,11 @@ function fileExists(path: string) {
 }
 
 function readFile(path: string) {
-  return readFileSync(resolve(root, path), "utf-8");
+  // With Node SSR adapter, static pages go to dist/client/
+  const primary = resolve(root, path);
+  if (existsSync(primary)) return readFileSync(primary, "utf-8");
+  const ssr = resolve(root, path.replace("dist/", "dist/client/"));
+  return readFileSync(ssr, "utf-8");
 }
 
 // ============================================================
@@ -607,7 +611,7 @@ describe("Page Assembly", () => {
 // ============================================================
 describe("Build Output", () => {
   it("dist/index.html exists", () => {
-    expect(fileExists("dist/index.html")).toBe(true);
+    expect(fileExists("dist/index.html") || fileExists("dist/client/index.html")).toBe(true);
   });
 
   it("dist/index.html has proper HTML structure", () => {

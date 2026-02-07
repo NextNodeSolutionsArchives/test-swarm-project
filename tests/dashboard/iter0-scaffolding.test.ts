@@ -9,8 +9,8 @@ describe("Iteration 0 — Dashboard Scaffolding", () => {
     it("should have node adapter configured in astro.config.mjs", () => {
       const config = readFileSync(join(ROOT, "astro.config.mjs"), "utf-8");
       expect(config).toContain("@astrojs/node");
-      expect(config).toContain("hybrid");
       expect(config).toContain("adapter");
+      // Astro 5 uses output: "static" with per-page prerender = false (hybrid removed)
     });
   });
 
