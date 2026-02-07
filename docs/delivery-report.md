@@ -77,3 +77,77 @@ src/components/
 - Iter 1: API endpoint integration tests (8ca9cac)
 - Iter 2: Auth page UI (0ce328e)
 - Iter 3: Navbar auth state (8f48de4)
+
+---
+
+# Delivery Report — Dashboard
+
+## Summary
+Task management dashboard with list and kanban views, custom columns, drag-and-drop, inline CRUD, search, filter tabs, responsive layout, toast-with-undo delete, and auth feature flag. 14 FRs delivered across 5 iterations with 143 tests.
+
+## Spec Coverage
+
+| FR | Description | Status |
+|----|-------------|--------|
+| FR-1 | Task list display sorted by position | Done |
+| FR-2 | Inline task create form | Done |
+| FR-3 | Inline task edit (click to expand) | Done |
+| FR-4 | Delete with toast+undo (10s countdown) | Done |
+| FR-5 | Filter tabs by status + URL param | Done |
+| FR-6 | Debounced search (300ms) | Done |
+| FR-7 | List/kanban view toggle | Done |
+| FR-8 | Kanban view with DnD between/within columns | Done |
+| FR-9 | List view drag-to-reorder | Done |
+| FR-10 | Custom columns CRUD | Done |
+| FR-11 | Persist view pref (localStorage + URL) | Done |
+| FR-12 | Responsive (mobile/tablet/desktop) | Done |
+| FR-13 | Empty state with CTA | Done |
+| FR-14 | Auth feature flag | Done |
+
+## Iterations
+- Iter 0: DB schema, auth middleware, types (263c63c) — 23 tests
+- Iter 1: Columns + tasks API routes (88c05f7) — 34 tests
+- Iter 2: Task CRUD UI, toast, empty state (286ca00) — 37 tests
+- Iter 3: Kanban view, column management, filter/search (d945950) — 21 tests
+- Iter 4: DnD + responsive layout (b740f2a) — 28 tests
+
+## Architecture
+
+```
+src/lib/
+  types.ts              — Task, Column, input interfaces
+  db.ts                 — SQLite schema, migrations, seed, cleanup
+  auth.ts               — Auth feature flag (mock/real)
+  sanitize.ts           — Input validation/sanitization
+  api-utils.ts          — JSON response helpers
+  api-client.ts         — Client-side API fetch wrapper
+  columns-repository.ts — Columns CRUD data access
+  tasks-repository.ts   — Tasks CRUD data access
+
+src/pages/api/
+  tasks/index.ts        — GET, POST tasks
+  tasks/[id].ts         — GET, PUT, DELETE task
+  tasks/[id]/restore.ts — POST restore soft-deleted task
+  tasks/reorder.ts      — POST reorder tasks
+  columns/index.ts      — GET, POST columns
+  columns/[id].ts       — GET, PUT, DELETE column
+  columns/reorder.ts    — POST reorder columns
+
+src/components/dashboard/
+  DashboardApp.tsx      — Main app shell (state, routing)
+  Toolbar.tsx           — Search, view toggle, add button
+  FilterTabs.tsx        — Status filter tabs
+  TaskCard.tsx          — Task display card
+  TaskForm.tsx          — Create/edit form with validation
+  EmptyState.tsx        — No-tasks CTA
+  Toast.tsx             — Undo toast with countdown
+  KanbanBoard.tsx       — Kanban with DndContext
+  KanbanColumn.tsx      — Column with droppable zone
+  SortableTaskCard.tsx  — DnD card wrapper
+  SortableListView.tsx  — List with DnD reorder
+
+src/pages/dashboard.astro — Dashboard route
+```
+
+## Dependencies Added
+- @dnd-kit/core, @dnd-kit/sortable, sonner
