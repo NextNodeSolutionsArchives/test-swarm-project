@@ -8,6 +8,7 @@ import {
   deleteTaskApi,
   restoreTaskApi,
 } from "@/lib/api-client";
+import { logout } from "@/lib/auth/client";
 import Toolbar from "./Toolbar";
 import FilterTabs from "./FilterTabs";
 import TaskForm from "./TaskForm";
@@ -15,6 +16,10 @@ import SortableListView from "./SortableListView";
 import EmptyState from "./EmptyState";
 import Toast, { type ToastItem } from "./Toast";
 import KanbanBoard from "./KanbanBoard";
+
+interface DashboardAppProps {
+  username?: string;
+}
 
 function getInitialViewMode(): "list" | "kanban" {
   // URL param takes precedence
@@ -34,7 +39,7 @@ function getInitialFilter(): string | null {
   return params.get("status") || null;
 }
 
-export default function DashboardApp() {
+export default function DashboardApp({ username }: DashboardAppProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
   const [loading, setLoading] = useState(true);
@@ -156,6 +161,11 @@ export default function DashboardApp() {
     }
   }
 
+  async function handleLogout() {
+    await logout();
+    window.location.href = "/auth";
+  }
+
   function dismissToast(id: string) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }
@@ -172,6 +182,23 @@ export default function DashboardApp() {
 
   return (
     <div className="min-h-screen bg-dark-base">
+      {/* Dashboard Header Bar */}
+      <header className="dashboard-header">
+        <div className="container-content dashboard-header-inner">
+          <a href="/" className="dashboard-header-logo">Pulseo</a>
+          <div className="dashboard-header-user">
+            {username && <span className="dashboard-header-username">{username}</span>}
+            <button
+              type="button"
+              className="dashboard-header-logout"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+          </div>
+        </div>
+      </header>
+
       <div className="container-content py-8 space-y-6">
         <h1 className="text-heading">Dashboard</h1>
 

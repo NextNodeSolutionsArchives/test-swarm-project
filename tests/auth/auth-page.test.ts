@@ -96,8 +96,8 @@ describe("FR-9: Auth Page", () => {
       expect(component).toContain("Creating account...");
     });
 
-    it("redirects to / on success", () => {
-      expect(component).toContain('window.location.href = "/"');
+    it("redirects to /dashboard on success", () => {
+      expect(component).toContain('window.location.href = "/dashboard"');
     });
 
     it("reads initial tab from URL hash", () => {

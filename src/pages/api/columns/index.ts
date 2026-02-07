@@ -3,6 +3,7 @@ import { getAuthenticatedUser, unauthorizedResponse } from "@/lib/auth-guard";
 import { jsonResponse, errorResponse, parseJsonBody } from "@/lib/api-utils";
 import { getColumns, createColumn } from "@/lib/columns-repository";
 import { sanitizeColumnName, sanitizeStatusValue } from "@/lib/sanitize";
+import { seedColumnsForUser } from "@/lib/db";
 import type { CreateColumnInput } from "@/lib/types";
 
 export const prerender = false;
@@ -10,6 +11,9 @@ export const prerender = false;
 export const GET: APIRoute = async ({ request }) => {
   const auth = await getAuthenticatedUser(request);
   if (!auth) return unauthorizedResponse();
+
+  // Auto-seed default columns for new users (idempotent)
+  seedColumnsForUser(auth.userId);
 
   const columns = getColumns(auth.userId);
   return jsonResponse({ columns });

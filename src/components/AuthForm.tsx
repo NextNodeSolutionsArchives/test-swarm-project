@@ -61,7 +61,7 @@ export default function AuthForm() {
     if (result.success) {
       setSuccess(true);
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       }, 800);
     } else {
       const code = result.error.code;
@@ -95,7 +95,7 @@ export default function AuthForm() {
     if (result.success) {
       setSuccess(true);
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       }, 800);
     } else {
       setErrors({ general: result.error.message });
