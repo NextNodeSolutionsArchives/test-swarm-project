@@ -72,9 +72,9 @@ describe("Iteration 3 — Views, Filtering, Kanban Display", () => {
       expect(col).toContain("TaskForm");
     });
 
-    it("should have three-dot menu with rename, color, delete options", () => {
+    it("should have three-dot menu with rename, color, delete options via DropdownMenu", () => {
       const col = readFileSync(join(ROOT, "src/components/dashboard/KanbanColumn.tsx"), "utf-8");
-      expect(col).toContain("showMenu");
+      expect(col).toContain("DropdownMenu");
       expect(col).toContain("Rename");
       expect(col).toContain("Change color");
       expect(col).toContain("Delete");
@@ -116,10 +116,10 @@ describe("Iteration 3 — Views, Filtering, Kanban Display", () => {
       expect(tabs).toContain("activeFilter === col.statusValue");
     });
 
-    it("should use column color for active status tabs", () => {
+    it("should use column color for active status tabs via StatusBadge", () => {
       const tabs = readFileSync(join(ROOT, "src/components/dashboard/FilterTabs.tsx"), "utf-8");
       expect(tabs).toContain("col.color");
-      expect(tabs).toContain("backgroundColor");
+      expect(tabs).toContain("StatusBadge");
     });
   });
 

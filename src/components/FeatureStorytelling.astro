@@ -1,4 +1,6 @@
 ---
+import Card from "./ui/Card.astro";
+
 const acts = [
   {
     id: "act-1",
@@ -54,7 +56,7 @@ const acts = [
 
           <div class={`feature-visual ${index % 2 === 1 ? "md:order-1" : ""}`} aria-hidden="true">
             {act.visual === "task-list" && (
-              <div class="glass p-6 md:p-8">
+              <Card padding="md">
                 <div class="flex items-center gap-2 mb-5">
                   <div class="w-2 h-2 rounded-full bg-green-primary" />
                   <span class="text-xs font-mono text-text-secondary">Today's Focus</span>
@@ -81,38 +83,19 @@ const acts = [
                     <span class="ml-auto text-xs font-mono text-text-secondary">Low</span>
                   </div>
                 </div>
-              </div>
+              </Card>
             )}
 
             {act.visual === "focus-timer" && (
-              <div class="glass p-6 md:p-8 text-center">
+              <Card padding="md" class="text-center">
                 <div class="flex items-center justify-center gap-2 mb-6">
                   <div class="w-2 h-2 rounded-full bg-green-primary animate-pulse" />
                   <span class="text-xs font-mono text-green-primary">Focus Mode Active</span>
                 </div>
                 <div class="focus-timer-ring relative w-40 h-40 mx-auto mb-6">
                   <svg viewBox="0 0 120 120" class="w-full h-full">
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="52"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      stroke-width="4"
-                    />
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="52"
-                      fill="none"
-                      stroke="#00D67E"
-                      stroke-width="4"
-                      stroke-linecap="round"
-                      stroke-dasharray="326.7"
-                      stroke-dashoffset="80"
-                      class="focus-ring"
-                      transform="rotate(-90 60 60)"
-                    />
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="#00D67E" stroke-width="4" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="80" class="focus-ring" transform="rotate(-90 60 60)" />
                   </svg>
                   <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span class="text-3xl font-mono font-bold text-text-primary">47:23</span>
@@ -129,11 +112,11 @@ const acts = [
                     <span>0 interruptions</span>
                   </div>
                 </div>
-              </div>
+              </Card>
             )}
 
             {act.visual === "dashboard" && (
-              <div class="glass p-6 md:p-8">
+              <Card padding="md">
                 <div class="flex items-center gap-2 mb-5">
                   <div class="w-2 h-2 rounded-full bg-green-primary" />
                   <span class="text-xs font-mono text-text-secondary">Day Summary</span>
@@ -158,7 +141,7 @@ const acts = [
                     Great focus day! You completed all high-priority items. Tomorrow: 2 carried tasks + standup at 9:30.
                   </p>
                 </div>
-              </div>
+              </Card>
             )}
           </div>
         </div>
@@ -184,43 +167,27 @@ const acts = [
 </style>
 
 <script>
+  import { registerGSAP, prefersReducedMotion } from "@/utils/animations";
   import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+  registerGSAP();
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!prefersReducedMotion) {
+  if (!prefersReducedMotion()) {
     document.querySelectorAll("[data-feature-act]").forEach((act) => {
       const content = act.querySelector(".feature-content");
       const visual = act.querySelector(".feature-visual");
 
       if (content) {
         gsap.from(content, {
-          scrollTrigger: {
-            trigger: act,
-            start: "top 70%",
-          },
-          opacity: 0,
-          x: -30,
-          duration: 0.8,
-          ease: "power3.out",
+          scrollTrigger: { trigger: act, start: "top 70%" },
+          opacity: 0, x: -30, duration: 0.8, ease: "power3.out",
         });
       }
 
       if (visual) {
         gsap.from(visual, {
-          scrollTrigger: {
-            trigger: act,
-            start: "top 70%",
-          },
-          opacity: 0,
-          x: 30,
-          scale: 0.95,
-          duration: 0.8,
-          ease: "power3.out",
-          delay: 0.2,
+          scrollTrigger: { trigger: act, start: "top 70%" },
+          opacity: 0, x: 30, scale: 0.95, duration: 0.8, ease: "power3.out", delay: 0.2,
         });
       }
     });
@@ -229,15 +196,8 @@ const acts = [
     const taskItems = document.querySelectorAll(".task-item");
     if (taskItems.length > 0) {
       gsap.from(taskItems, {
-        scrollTrigger: {
-          trigger: "[data-task-list]",
-          start: "top 75%",
-        },
-        opacity: 0,
-        x: -20,
-        stagger: 0.12,
-        duration: 0.6,
-        ease: "power3.out",
+        scrollTrigger: { trigger: "[data-task-list]", start: "top 75%" },
+        opacity: 0, x: -20, stagger: 0.12, duration: 0.6, ease: "power3.out",
       });
     }
   }

@@ -130,15 +130,15 @@ describe("FR-1: Astro Project Scaffolding", () => {
   });
 
   describe("design tokens", () => {
-    it("has design-tokens.ts utility", () => {
-      expect(fileExists("src/utils/design-tokens.ts")).toBe(true);
+    it("design tokens are consolidated to CSS (design-tokens.ts removed)", () => {
+      expect(fileExists("src/utils/design-tokens.ts")).toBe(false);
     });
 
-    it("exports correct color values", async () => {
-      const tokens = await import("../src/utils/design-tokens.ts");
-      expect(tokens.COLORS.greenPrimary).toBe("#00D67E");
-      expect(tokens.COLORS.orangePrimary).toBe("#FF6B35");
-      expect(tokens.COLORS.darkBase).toBe("#0A0A0F");
+    it("CSS variables serve as single source of truth", () => {
+      const css = readFile("src/styles/global.css");
+      expect(css).toContain("--color-green-primary: #00D67E");
+      expect(css).toContain("--color-orange-primary: #FF6B35");
+      expect(css).toContain("--color-dark-base: #0A0A0F");
     });
   });
 

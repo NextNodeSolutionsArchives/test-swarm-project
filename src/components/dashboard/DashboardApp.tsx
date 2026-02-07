@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { LogOut } from "lucide-react";
 import type { Task, Column } from "@/lib/types";
 import {
   fetchTasks,
@@ -9,6 +10,8 @@ import {
   restoreTaskApi,
 } from "@/lib/api-client";
 import { logout } from "@/lib/auth/client";
+import Button from "@/components/ui/Button";
+import Spinner from "@/components/ui/Spinner";
 import Toolbar from "./Toolbar";
 import FilterTabs from "./FilterTabs";
 import TaskForm from "./TaskForm";
@@ -22,12 +25,10 @@ interface DashboardAppProps {
 }
 
 function getInitialViewMode(): "list" | "kanban" {
-  // URL param takes precedence
   const params = new URLSearchParams(window.location.search);
   const urlView = params.get("view");
   if (urlView === "list" || urlView === "kanban") return urlView;
 
-  // Then localStorage
   const stored = localStorage.getItem("dashboard-view-mode");
   if (stored === "list" || stored === "kanban") return stored;
 
@@ -52,7 +53,6 @@ export default function DashboardApp({ username }: DashboardAppProps) {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Debounce search
   useEffect(() => {
     searchTimerRef.current = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -60,7 +60,6 @@ export default function DashboardApp({ username }: DashboardAppProps) {
     return () => clearTimeout(searchTimerRef.current);
   }, [searchQuery]);
 
-  // Load data
   const loadData = useCallback(async () => {
     try {
       setError(null);
@@ -78,7 +77,6 @@ export default function DashboardApp({ username }: DashboardAppProps) {
     loadData();
   }, [loadData]);
 
-  // Persist view mode
   function handleViewModeChange(mode: "list" | "kanban") {
     setViewMode(mode);
     localStorage.setItem("dashboard-view-mode", mode);
@@ -87,7 +85,6 @@ export default function DashboardApp({ username }: DashboardAppProps) {
     window.history.replaceState({}, "", url.toString());
   }
 
-  // Filter change — update URL
   function handleFilterChange(status: string | null) {
     setActiveFilter(status);
     const url = new URL(window.location.href);
@@ -99,7 +96,6 @@ export default function DashboardApp({ username }: DashboardAppProps) {
     window.history.replaceState({}, "", url.toString());
   }
 
-  // Filtered + searched tasks
   const filteredTasks = useMemo(() => {
     let result = tasks;
     if (activeFilter) {
@@ -173,7 +169,7 @@ export default function DashboardApp({ username }: DashboardAppProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-green-primary border-t-transparent rounded-full animate-spin" />
+        <Spinner size="md" />
       </div>
     );
   }
@@ -188,13 +184,15 @@ export default function DashboardApp({ username }: DashboardAppProps) {
           <a href="/" className="dashboard-header-logo">Pulseo</a>
           <div className="dashboard-header-user">
             {username && <span className="dashboard-header-username">{username}</span>}
-            <button
-              type="button"
-              className="dashboard-header-logout"
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={handleLogout}
+              className="text-xs gap-1.5"
             >
+              <LogOut size={14} />
               Log out
-            </button>
+            </Button>
           </div>
         </div>
       </header>

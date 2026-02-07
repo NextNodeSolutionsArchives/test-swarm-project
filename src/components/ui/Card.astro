@@ -1,0 +1,28 @@
+---
+interface Props {
+  padding?: "sm" | "md" | "lg";
+  borderColor?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  padding = "md",
+  borderColor,
+  class: className = "",
+  ...rest
+} = Astro.props;
+
+const paddingClasses: Record<string, string> = {
+  sm: "p-4",
+  md: "p-6 md:p-8",
+  lg: "p-8 md:p-12",
+};
+
+const borderStyle = borderColor ? `border-color: ${borderColor}` : "";
+const classes = `glass ${paddingClasses[padding]} ${className}`.trim();
+---
+
+<div class={classes} style={borderStyle} {...rest}>
+  <slot />
+</div>

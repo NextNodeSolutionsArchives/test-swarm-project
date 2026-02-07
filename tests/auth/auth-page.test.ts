@@ -28,10 +28,9 @@ describe("FR-9: Auth Page", () => {
       expect(page).toContain('client:only="react"');
     });
 
-    it("has background gradient orbs", () => {
-      expect(page).toContain("auth-bg-orb");
-      expect(page).toContain("auth-bg-orb-green");
-      expect(page).toContain("auth-bg-orb-orange");
+    it("has background gradient orbs via GradientOrbs component", () => {
+      expect(page).toContain("GradientOrbs");
+      expect(page).toContain('variant="auth"');
     });
 
     it("has glassmorphism card styles", () => {

@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { Plus, MoreVertical } from "lucide-react";
 import type { Task, Column } from "@/lib/types";
+import Button from "@/components/ui/Button";
+import DropdownMenu from "@/components/ui/DropdownMenu";
 import SortableTaskCard from "./SortableTaskCard";
 import TaskForm from "./TaskForm";
 
@@ -41,7 +44,6 @@ export default function KanbanColumn({
   const [isAdding, setIsAdding] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(column.name);
-  const [showMenu, setShowMenu] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   function handleNameSubmit() {
@@ -51,6 +53,25 @@ export default function KanbanColumn({
     }
     setIsEditingName(false);
   }
+
+  const menuItems = [
+    {
+      label: "Rename",
+      onClick: () => {
+        setEditName(column.name);
+        setIsEditingName(true);
+      },
+    },
+    {
+      label: "Change color",
+      onClick: () => setShowColorPicker(true),
+    },
+    {
+      label: "Delete",
+      onClick: () => onDeleteColumn(column.id),
+      danger: true,
+    },
+  ];
 
   return (
     <div className="flex flex-col min-w-[280px] max-w-[320px] w-full shrink-0">
@@ -92,64 +113,23 @@ export default function KanbanColumn({
 
         <span className="text-xs text-text-secondary">{tasks.length}</span>
 
-        <button
+        <Button
+          variant="icon"
           onClick={() => setIsAdding(true)}
-          className="text-text-secondary hover:text-green-primary p-1"
           aria-label="Add task"
+          className="text-text-secondary hover:text-green-primary"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
+          <Plus size={14} />
+        </Button>
 
-        {/* Menu */}
-        <div className="relative">
-          <button
-            onClick={() => setShowMenu(!showMenu)}
-            className="text-text-secondary hover:text-text-primary p-1"
-            aria-label="Column menu"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="2" />
-              <circle cx="12" cy="12" r="2" />
-              <circle cx="12" cy="19" r="2" />
-            </svg>
-          </button>
-
-          {showMenu && (
-            <div className="absolute right-0 top-full mt-1 glass rounded-lg py-1 min-w-[140px] z-20">
-              <button
-                onClick={() => {
-                  setEditName(column.name);
-                  setIsEditingName(true);
-                  setShowMenu(false);
-                }}
-                className="w-full text-left px-3 py-1.5 text-sm text-text-primary hover:bg-surface-hover"
-              >
-                Rename
-              </button>
-              <button
-                onClick={() => {
-                  setShowColorPicker(true);
-                  setShowMenu(false);
-                }}
-                className="w-full text-left px-3 py-1.5 text-sm text-text-primary hover:bg-surface-hover"
-              >
-                Change color
-              </button>
-              <button
-                onClick={() => {
-                  onDeleteColumn(column.id);
-                  setShowMenu(false);
-                }}
-                className="w-full text-left px-3 py-1.5 text-sm text-red-400 hover:bg-surface-hover"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
+        <DropdownMenu
+          trigger={
+            <Button variant="icon" aria-label="Column menu">
+              <MoreVertical size={14} />
+            </Button>
+          }
+          items={menuItems}
+        />
       </div>
 
       {/* Color Picker */}

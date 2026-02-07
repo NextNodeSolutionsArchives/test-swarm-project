@@ -1,0 +1,65 @@
+---
+interface OrbConfig {
+  color: string;
+  size: string;
+  position: Record<string, string>;
+  blur: string;
+  opacity: number;
+}
+
+interface Props {
+  variant?: "hero" | "cta" | "auth";
+  orbs?: OrbConfig[];
+  class?: string;
+}
+
+const { variant, orbs: customOrbs, class: className = "" } = Astro.props;
+
+const PRESETS: Record<string, OrbConfig[]> = {
+  hero: [
+    { color: "#00D67E", size: "600px", position: { top: "-10%", left: "-5%" }, blur: "100px", opacity: 0.25 },
+    { color: "#FF6B35", size: "500px", position: { top: "30%", right: "-10%" }, blur: "100px", opacity: 0.2 },
+    { color: "#8B5CF6", size: "400px", position: { bottom: "-5%", left: "30%" }, blur: "100px", opacity: 0.15 },
+    { color: "#06B6D4", size: "350px", position: { top: "50%", left: "50%" }, blur: "100px", opacity: 0.12 },
+  ],
+  cta: [
+    { color: "#00D67E", size: "500px", position: { top: "-20%", left: "10%" }, blur: "120px", opacity: 0.15 },
+    { color: "#FF6B35", size: "400px", position: { bottom: "-20%", right: "10%" }, blur: "120px", opacity: 0.12 },
+  ],
+  auth: [
+    { color: "var(--color-green-primary)", size: "400px", position: { top: "-100px", right: "-100px" }, blur: "120px", opacity: 0.15 },
+    { color: "var(--color-orange-primary)", size: "300px", position: { bottom: "-50px", left: "-50px" }, blur: "120px", opacity: 0.15 },
+  ],
+};
+
+const orbsToRender = customOrbs || (variant ? PRESETS[variant] : []);
+---
+
+<div class={`gradient-orbs-container ${className}`} aria-hidden="true">
+  {orbsToRender.map((orb) => (
+    <div
+      class="gradient-orb"
+      style={`
+        width: ${orb.size};
+        height: ${orb.size};
+        background: ${orb.color};
+        filter: blur(${orb.blur});
+        opacity: ${orb.opacity};
+        ${Object.entries(orb.position).map(([k, v]) => `${k}: ${v}`).join("; ")};
+      `}
+    />
+  ))}
+</div>
+
+<style>
+  .gradient-orbs-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+  }
+</style>

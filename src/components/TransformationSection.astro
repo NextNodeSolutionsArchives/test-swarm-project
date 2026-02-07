@@ -66,41 +66,25 @@
 </style>
 
 <script>
+  import { scrollScale, scrollStagger, registerGSAP, prefersReducedMotion } from "@/utils/animations";
   import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+  registerGSAP();
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!prefersReducedMotion) {
-    // Headline gradient reveal
-    gsap.from("[data-transform-headline]", {
-      scrollTrigger: {
-        trigger: "#transformation",
-        start: "top 65%",
-      },
-      opacity: 0,
-      scale: 0.9,
-      y: 40,
+  if (!prefersReducedMotion()) {
+    scrollScale("[data-transform-headline]", {
+      trigger: "#transformation" as unknown as Element,
+      start: "top 65%",
       duration: 1.2,
-      ease: "power3.out",
     });
 
-    // Supporting text
-    gsap.from("[data-transform-reveal]", {
-      scrollTrigger: {
-        trigger: "#transformation",
-        start: "top 65%",
-      },
-      opacity: 0,
-      y: 20,
+    scrollStagger("[data-transform-reveal]", {
+      trigger: "#transformation" as unknown as Element,
+      start: "top 65%",
       stagger: 0.15,
-      duration: 0.8,
-      ease: "power3.out",
     });
 
-    // Ordered cards animate in
+    // Ordered cards animate in (unique animation — not a generic utility)
     gsap.fromTo(
       ".ordered-card",
       {

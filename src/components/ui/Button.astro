@@ -1,0 +1,73 @@
+---
+interface Props {
+  variant?: "primary" | "secondary" | "icon";
+  size?: "sm" | "md" | "lg";
+  disabled?: boolean;
+  href?: string;
+  class?: string;
+  type?: "button" | "submit" | "reset";
+  "data-cursor-hover"?: boolean;
+  [key: string]: unknown;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  disabled = false,
+  href,
+  class: className = "",
+  type = "button",
+  ...rest
+} = Astro.props;
+
+const sizeClasses: Record<string, string> = {
+  sm: "px-4 py-2 text-sm rounded-lg",
+  md: "px-6 py-3 text-base rounded-xl",
+  lg: "px-8 py-4 text-lg rounded-xl",
+};
+
+const variantClasses: Record<string, string> = {
+  primary: "btn-primary font-semibold text-dark-base",
+  secondary: "btn-secondary font-medium text-text-secondary hover:text-text-primary border border-border hover:bg-surface-hover",
+  icon: "btn-icon p-2 text-text-secondary hover:text-text-primary rounded-lg",
+};
+
+const sizeClass = variant === "icon" ? "" : sizeClasses[size];
+const classes = `inline-flex items-center justify-center gap-2 transition-all duration-200 ${variantClasses[variant]} ${sizeClass} ${className}`.trim();
+
+const Tag = href ? "a" : "button";
+---
+
+{href ? (
+  <a href={href} class={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes} disabled={disabled} {...rest}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .btn-primary {
+    background: var(--color-green-primary);
+    box-shadow: 0 0 30px rgba(0, 214, 126, 0.3);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(0, 214, 126, 0.5);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: transparent;
+  }
+  .btn-icon {
+    background: transparent;
+  }
+  .btn-icon:hover {
+    background: var(--color-surface);
+  }
+</style>

@@ -11,7 +11,11 @@ import {
   type DragEndEvent,
   type DragOverEvent,
 } from "@dnd-kit/core";
+import { Plus } from "lucide-react";
 import type { Task, Column } from "@/lib/types";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import Card from "@/components/ui/Card";
 import KanbanColumn from "./KanbanColumn";
 import TaskCard from "./TaskCard";
 import { createColumnApi, updateColumnApi, deleteColumnApi, reorderTasksApi } from "@/lib/api-client";
@@ -67,7 +71,6 @@ export default function KanbanBoard({
     const activeTaskObj = tasks.find((t) => t.id === activeId);
     if (!activeTaskObj) return;
 
-    // Determine target column status
     let targetStatus: string | null = null;
     if (overId.startsWith("column-")) {
       targetStatus = overId.replace("column-", "");
@@ -77,7 +80,6 @@ export default function KanbanBoard({
     }
 
     if (targetStatus && targetStatus !== activeTaskObj.status) {
-      // Move task to new column optimistically
       onTasksChange(
         tasks.map((t) =>
           t.id === activeId ? { ...t, status: targetStatus! } : t
@@ -98,7 +100,6 @@ export default function KanbanBoard({
       const activeTaskObj = tasks.find((t) => t.id === activeId);
       if (!activeTaskObj) return;
 
-      // Determine target status
       let targetStatus = activeTaskObj.status;
       if (overId.startsWith("column-")) {
         targetStatus = overId.replace("column-", "");
@@ -107,24 +108,20 @@ export default function KanbanBoard({
         if (overTask) targetStatus = overTask.status;
       }
 
-      // Get tasks in the target column
       const columnTasks = tasks
         .filter((t) => t.status === targetStatus && t.id !== activeId)
         .sort((a, b) => a.position - b.position);
 
-      // Find insertion index
       let insertIndex = columnTasks.length;
       if (!overId.startsWith("column-")) {
         const overIndex = columnTasks.findIndex((t) => t.id === overId);
         if (overIndex >= 0) insertIndex = overIndex;
       }
 
-      // Build new order
       const reordered = [...columnTasks];
       reordered.splice(insertIndex, 0, { ...activeTaskObj, status: targetStatus });
       const newIds = reordered.map((t) => t.id);
 
-      // Optimistic update
       const updatedTasks = tasks.map((t) => {
         if (t.id === activeId) {
           return { ...t, status: targetStatus, position: insertIndex };
@@ -137,7 +134,6 @@ export default function KanbanBoard({
       });
       onTasksChange(updatedTasks);
 
-      // Persist to server
       try {
         await reorderTasksApi(newIds, targetStatus);
       } catch (err) {
@@ -221,14 +217,12 @@ export default function KanbanBoard({
           {/* Add Column */}
           {isAddingColumn ? (
             <div className="min-w-[280px] shrink-0">
-              <div className="glass p-3 space-y-2">
-                <input
+              <Card padding="sm" className="space-y-2">
+                <Input
                   type="text"
                   value={newColumnName}
                   onChange={(e) => setNewColumnName(e.target.value)}
                   placeholder="Column name..."
-                  className="w-full bg-transparent border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-secondary outline-none focus:ring-1 focus:ring-green-primary"
-                  autoFocus
                   maxLength={50}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleAddColumn();
@@ -237,36 +231,31 @@ export default function KanbanBoard({
                       setNewColumnName("");
                     }
                   }}
+                  autoFocus
                 />
                 <div className="flex gap-2">
-                  <button
-                    onClick={handleAddColumn}
-                    className="px-3 py-1 text-sm font-semibold text-dark-base rounded-lg"
-                    style={{ background: "linear-gradient(135deg, #00D67E, #00B468)" }}
-                  >
+                  <Button variant="primary" size="sm" onClick={handleAddColumn}>
                     Add
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={() => {
                       setIsAddingColumn(false);
                       setNewColumnName("");
                     }}
-                    className="px-3 py-1 text-sm text-text-secondary hover:text-text-primary"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </div>
-              </div>
+              </Card>
             </div>
           ) : (
             <button
               onClick={() => setIsAddingColumn(true)}
               className="min-w-[280px] h-[44px] shrink-0 glass flex items-center justify-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors rounded-xl"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
+              <Plus size={16} />
               Add Column
             </button>
           )}

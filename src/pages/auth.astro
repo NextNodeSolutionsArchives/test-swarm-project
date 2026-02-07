@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import AuthForm from "@/components/AuthForm";
+import GradientOrbs from "@/components/ui/GradientOrbs.astro";
 import { getAuthenticatedUser } from "@/lib/auth-guard";
 
 export const prerender = false;
@@ -13,9 +14,7 @@ if (auth) {
 
 <BaseLayout title="Pulseo — Sign in" description="Sign in or create a Pulseo account.">
   <main class="auth-page">
-    <!-- Background gradient orbs (matching landing page) -->
-    <div class="auth-bg-orb auth-bg-orb-green" aria-hidden="true"></div>
-    <div class="auth-bg-orb auth-bg-orb-orange" aria-hidden="true"></div>
+    <GradientOrbs variant="auth" />
 
     <div class="auth-container">
       <a href="/" class="auth-logo-link">
@@ -36,30 +35,6 @@ if (auth) {
     position: relative;
     overflow: hidden;
     padding: 2rem 1rem;
-  }
-
-  .auth-bg-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.15;
-    pointer-events: none;
-  }
-
-  .auth-bg-orb-green {
-    width: 400px;
-    height: 400px;
-    background: var(--color-green-primary);
-    top: -100px;
-    right: -100px;
-  }
-
-  .auth-bg-orb-orange {
-    width: 300px;
-    height: 300px;
-    background: var(--color-orange-primary);
-    bottom: -50px;
-    left: -50px;
   }
 
   .auth-container {
