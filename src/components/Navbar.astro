@@ -1,5 +1,6 @@
 ---
 import PulseoLogo from "./PulseoLogo.astro";
+import NavbarAuth, { NavbarAuthMobile } from "./NavbarAuth";
 ---
 
 <nav
@@ -18,10 +19,7 @@ import PulseoLogo from "./PulseoLogo.astro";
     </ul>
 
     <div class="hidden md:block">
-      <a href="/dashboard" class="btn-cta-sm">
-        Dashboard
-        <span aria-hidden="true">&rarr;</span>
-      </a>
+      <NavbarAuth client:only="react" />
     </div>
 
     <!-- Mobile hamburger -->
@@ -48,11 +46,7 @@ import PulseoLogo from "./PulseoLogo.astro";
       <li><a href="#features" class="nav-link text-2xl">Features</a></li>
       <li><a href="#testimonials" class="nav-link text-2xl">Testimonials</a></li>
       <li><a href="#pricing" class="nav-link text-2xl">Pricing</a></li>
-      <li>
-        <a href="/dashboard" class="btn-cta-sm text-lg">
-          Dashboard &rarr;
-        </a>
-      </li>
+      <NavbarAuthMobile client:only="react" />
     </ul>
   </div>
 </nav>
@@ -69,25 +63,6 @@ import PulseoLogo from "./PulseoLogo.astro";
   .nav-link:hover,
   .nav-link:focus-visible {
     color: var(--color-text-primary);
-  }
-
-  .btn-cta-sm {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-dark-base);
-    background: var(--color-green-primary);
-    border-radius: 8px;
-    text-decoration: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .btn-cta-sm:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
   }
 
   .hamburger-line {
@@ -133,6 +108,194 @@ import PulseoLogo from "./PulseoLogo.astro";
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--color-border);
+  }
+</style>
+
+<style is:global>
+  /* NavbarAuth component styles (global for React islands) */
+  .navbar-auth-placeholder {
+    width: 120px;
+    height: 36px;
+  }
+
+  .navbar-auth-unauthed {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .navbar-signin-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .navbar-signin-link:hover {
+    color: var(--color-text-primary);
+  }
+
+  .navbar-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark-base);
+    background: var(--color-green-primary);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .navbar-cta-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .navbar-auth-authed {
+    position: relative;
+  }
+
+  .navbar-avatar-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .navbar-avatar-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .navbar-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-green-primary), var(--color-orange-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.05em;
+  }
+
+  .navbar-avatar-lg {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+  }
+
+  .navbar-username {
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .navbar-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 220px;
+    background: rgba(20, 20, 30, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 0.5rem 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    z-index: 100;
+  }
+
+  .navbar-dropdown-header {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .navbar-dropdown-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .navbar-dropdown-email {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .navbar-dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.25rem 0;
+  }
+
+  .navbar-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    font-family: var(--font-sans);
+  }
+
+  .navbar-dropdown-item:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+  }
+
+  .navbar-dropdown-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .navbar-dropdown-logout:hover {
+    color: #ef4444 !important;
+  }
+
+  /* Mobile auth styles */
+  .navbar-mobile-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .navbar-mobile-username {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .navbar-mobile-logout {
+    background: none;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 0.5rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-family: var(--font-sans);
+  }
+
+  .navbar-mobile-logout:hover {
+    background: rgba(239, 68, 68, 0.1);
   }
 </style>
 

@@ -507,10 +507,13 @@ describe("FR-13: Navigation Bar", () => {
     expect(html).toContain("Pricing");
   });
 
-  it("has CTA button linking to /dashboard", () => {
+  it("has auth-aware CTA (now via React NavbarAuth component)", () => {
     const html = readFile("src/components/Navbar.astro");
-    expect(html).toContain('href="/dashboard"');
-    expect(html).toContain("Dashboard");
+    expect(html).toContain("NavbarAuth");
+    // Dashboard link is now in the React component NavbarAuth.tsx
+    const authComponent = readFile("src/components/NavbarAuth.tsx");
+    expect(authComponent).toContain("/dashboard");
+    expect(authComponent).toContain("Dashboard");
   });
 
   it("has scroll-triggered glassmorphism background", () => {
