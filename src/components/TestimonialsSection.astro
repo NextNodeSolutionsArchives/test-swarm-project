@@ -1,4 +1,6 @@
 ---
+import Card from "./ui/Card.astro";
+
 const testimonials = [
   {
     quote:
@@ -41,7 +43,7 @@ const testimonials = [
 
     <div class="grid md:grid-cols-3 gap-6 md:gap-8">
       {testimonials.map((t) => (
-        <div class="glass p-6 md:p-8 flex flex-col testimonial-card" data-testimonial>
+        <Card padding="md" class="flex flex-col testimonial-card" data-testimonial>
           <div class="text-2xl text-text-secondary/30 mb-4 leading-none" aria-hidden="true">
             &#x201C;
           </div>
@@ -61,32 +63,19 @@ const testimonials = [
               </p>
             </div>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   </div>
 </section>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { scrollScale, prefersReducedMotion } from "@/utils/animations";
 
-  gsap.registerPlugin(ScrollTrigger);
-
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!prefersReducedMotion) {
-    gsap.from("[data-testimonial]", {
-      scrollTrigger: {
-        trigger: "#testimonials",
-        start: "top 70%",
-      },
-      opacity: 0,
-      y: 40,
-      scale: 0.95,
+  if (!prefersReducedMotion()) {
+    scrollScale("[data-testimonial]", {
+      trigger: "#testimonials" as unknown as Element,
       stagger: 0.15,
-      duration: 0.8,
-      ease: "power3.out",
     });
   }
 </script>

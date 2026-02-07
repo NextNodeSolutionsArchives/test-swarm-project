@@ -24,11 +24,10 @@ describe("FR-2: Hero Section", () => {
     expect(fileExists("src/components/HeroSection.astro")).toBe(true);
   });
 
-  it("has gradient orb elements", () => {
+  it("has gradient orb elements via GradientOrbs component", () => {
     const html = readFile("src/components/HeroSection.astro");
-    expect(html).toContain("orb-green");
-    expect(html).toContain("orb-orange");
-    expect(html).toContain("orb-purple");
+    expect(html).toContain("GradientOrbs");
+    expect(html).toContain('variant="hero"');
   });
 
   it("has the headline 'Your workflow, in flow.'", () => {
@@ -73,7 +72,7 @@ describe("FR-2: Hero Section", () => {
   it("renders in dist/index.html", () => {
     const dist = readFile("dist/index.html");
     expect(dist).toContain("Your workflow, in flow.");
-    expect(dist).toContain("orb-green");
+    expect(dist).toContain("gradient-orb");
   });
 });
 
@@ -135,7 +134,7 @@ describe("FR-4: Transformation Section", () => {
   it("has GSAP animations", () => {
     const html = readFile("src/components/TransformationSection.astro");
     expect(html).toContain("gsap");
-    expect(html).toContain("ScrollTrigger");
+    expect(html).toContain("animations");
   });
 
   it("renders in dist/index.html", () => {
@@ -177,9 +176,10 @@ describe("FR-5: Feature Storytelling", () => {
     expect(html).toContain("dashboard");
   });
 
-  it("uses glassmorphism cards", () => {
+  it("uses glassmorphism cards via Card component", () => {
     const html = readFile("src/components/FeatureStorytelling.astro");
-    expect(html).toContain("glass");
+    expect(html).toContain("Card");
+    expect(html).toContain("from \"./ui/Card.astro\"");
   });
 
   it("uses monospace font for time badges", () => {
@@ -222,9 +222,10 @@ describe("FR-6: Stats Section", () => {
     expect(html).toContain("font-mono");
   });
 
-  it("uses glassmorphism card", () => {
+  it("uses glassmorphism card via Card component", () => {
     const html = readFile("src/components/StatsSection.astro");
-    expect(html).toContain("glass");
+    expect(html).toContain("Card");
+    expect(html).toContain("from \"./ui/Card.astro\"");
   });
 
   it("renders in dist/index.html", () => {
@@ -256,9 +257,10 @@ describe("FR-7: Testimonials Section", () => {
     expect(html).toContain("Helios Cloud");
   });
 
-  it("uses glassmorphism cards", () => {
+  it("uses glassmorphism cards via Card component", () => {
     const html = readFile("src/components/TestimonialsSection.astro");
-    expect(html).toContain("glass");
+    expect(html).toContain("Card");
+    expect(html).toContain("from \"./ui/Card.astro\"");
   });
 
   it("has gradient avatar placeholders", () => {
@@ -309,10 +311,10 @@ describe("FR-8: Final CTA Section", () => {
     expect(html).toContain("$12/mo");
   });
 
-  it("has background orbs (callback to hero)", () => {
+  it("has background orbs via GradientOrbs component", () => {
     const html = readFile("src/components/FinalCTA.astro");
-    expect(html).toContain("cta-orb-green");
-    expect(html).toContain("cta-orb-orange");
+    expect(html).toContain("GradientOrbs");
+    expect(html).toContain('variant="cta"');
   });
 
   it("has parallax animation", () => {
@@ -558,7 +560,10 @@ describe("Accessibility", () => {
     ];
     for (const comp of components) {
       const html = readFile(`src/components/${comp}`);
-      expect(html).toContain("prefers-reduced-motion");
+      // Components use either inline media query or prefersReducedMotion from animation utils
+      const hasMotionCheck =
+        html.includes("prefers-reduced-motion") || html.includes("prefersReducedMotion");
+      expect(hasMotionCheck).toBe(true);
     }
   });
 

@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import type { Column } from "@/lib/types";
+import Card from "@/components/ui/Card";
+import Input, { Textarea } from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 interface TaskFormProps {
   columns: Column[];
@@ -59,35 +62,25 @@ export default function TaskForm({
   }
 
   return (
-    <div className="glass p-4 space-y-3" onKeyDown={handleKeyDown}>
-      <div>
-        <input
-          ref={titleRef}
-          type="text"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            if (titleError) setTitleError("");
-          }}
-          placeholder="Task title..."
-          className={`w-full bg-transparent border rounded-lg px-3 py-2 text-text-primary placeholder:text-text-secondary outline-none focus:ring-1 ${
-            titleError
-              ? "border-red-500 focus:ring-red-500"
-              : "border-border focus:ring-green-primary"
-          }`}
-          maxLength={200}
-        />
-        {titleError && (
-          <p className="text-red-500 text-xs mt-1">{titleError}</p>
-        )}
-      </div>
+    <Card padding="sm" className="space-y-3" onKeyDown={handleKeyDown}>
+      <Input
+        ref={titleRef}
+        type="text"
+        value={title}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          if (titleError) setTitleError("");
+        }}
+        placeholder="Task title..."
+        error={titleError}
+        maxLength={200}
+      />
 
       {showDescription ? (
-        <textarea
+        <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description (optional)..."
-          className="w-full bg-transparent border border-border rounded-lg px-3 py-2 text-text-primary placeholder:text-text-secondary outline-none focus:ring-1 focus:ring-green-primary resize-y min-h-[60px]"
           maxLength={2000}
           rows={3}
         />
@@ -115,20 +108,13 @@ export default function TaskForm({
 
         <div className="flex-1" />
 
-        <button
-          onClick={onCancel}
-          className="px-4 py-1.5 text-sm text-text-secondary hover:text-text-primary rounded-lg border border-border hover:bg-surface-hover"
-        >
+        <Button variant="secondary" size="sm" onClick={onCancel}>
           Cancel
-        </button>
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-1.5 text-sm font-semibold text-dark-base rounded-lg"
-          style={{ background: "linear-gradient(135deg, #00D67E, #00B468)" }}
-        >
+        </Button>
+        <Button variant="primary" size="sm" onClick={handleSubmit}>
           {submitLabel}
-        </button>
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 }

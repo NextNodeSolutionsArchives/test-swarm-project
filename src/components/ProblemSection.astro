@@ -103,14 +103,13 @@
 </style>
 
 <script>
+  import { scrollStagger, registerGSAP, prefersReducedMotion } from "@/utils/animations";
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+  registerGSAP();
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!prefersReducedMotion) {
+  if (!prefersReducedMotion()) {
     // Counter animation
     const counter = document.querySelector(".stat-counter") as HTMLElement;
     if (counter) {
@@ -135,20 +134,13 @@
       });
     }
 
-    // Text reveal stagger
-    gsap.from("[data-problem-reveal]", {
-      scrollTrigger: {
-        trigger: "#problem",
-        start: "top 70%",
-      },
-      opacity: 0,
-      y: 30,
+    // Text reveal stagger — uses animation utility
+    scrollStagger("[data-problem-reveal]", {
+      trigger: "#problem" as unknown as Element,
       stagger: 0.15,
-      duration: 0.8,
-      ease: "power3.out",
     });
 
-    // Chaos cards scatter in
+    // Chaos cards scatter in (unique animation — not a generic utility pattern)
     const chaosCards = document.querySelectorAll("[data-chaos]");
     chaosCards.forEach((card, i) => {
       const randomX = (Math.random() - 0.5) * 200;

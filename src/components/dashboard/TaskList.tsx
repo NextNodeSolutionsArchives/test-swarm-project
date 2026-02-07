@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Task, Column } from "@/lib/types";
 import { fetchTasks, fetchColumns, createTaskApi, updateTaskApi, deleteTaskApi, restoreTaskApi } from "@/lib/api-client";
+import Spinner from "@/components/ui/Spinner";
 import TaskCard from "./TaskCard";
 import TaskForm from "./TaskForm";
 import EmptyState from "./EmptyState";
@@ -53,10 +54,8 @@ export default function TaskList() {
   async function handleDelete(id: string) {
     try {
       await deleteTaskApi(id);
-      // Optimistically remove from list
       setTasks((prev) => prev.filter((t) => t.id !== id));
 
-      // Add toast with undo
       const toastId = `delete-${id}-${Date.now()}`;
       setToasts((prev) => [
         ...prev,
@@ -85,7 +84,7 @@ export default function TaskList() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-green-primary border-t-transparent rounded-full animate-spin" />
+        <Spinner size="md" />
       </div>
     );
   }

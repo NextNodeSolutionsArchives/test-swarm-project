@@ -1,4 +1,5 @@
 import type { Column } from "@/lib/types";
+import StatusBadge from "@/components/ui/StatusBadge";
 
 interface FilterTabsProps {
   columns: Column[];
@@ -23,18 +24,15 @@ export default function FilterTabs({ columns, activeFilter, onFilterChange }: Fi
         <button
           key={col.id}
           onClick={() => onFilterChange(col.statusValue)}
-          className={`px-3 py-1.5 text-sm rounded-lg whitespace-nowrap transition-colors ${
-            activeFilter === col.statusValue
-              ? "font-medium"
-              : "text-text-secondary hover:text-text-primary hover:bg-surface"
-          }`}
-          style={
-            activeFilter === col.statusValue
-              ? { backgroundColor: `${col.color}20`, color: col.color || undefined }
-              : undefined
-          }
+          className="rounded-lg whitespace-nowrap transition-colors"
         >
-          {col.name}
+          {activeFilter === col.statusValue ? (
+            <StatusBadge label={col.name} color={col.color || "#6B7280"} size="md" />
+          ) : (
+            <span className="px-3 py-1.5 text-sm text-text-secondary hover:text-text-primary hover:bg-surface inline-block rounded-lg">
+              {col.name}
+            </span>
+          )}
         </button>
       ))}
     </div>

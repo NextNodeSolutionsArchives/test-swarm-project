@@ -110,9 +110,10 @@ describe("Iteration 2 — Task CRUD UI", () => {
       expect(card).toContain("onDelete");
     });
 
-    it("should use glassmorphism card style", () => {
+    it("should use glassmorphism card via Card component", () => {
       const card = readFileSync(join(ROOT, "src/components/dashboard/TaskCard.tsx"), "utf-8");
-      expect(card).toContain("glass");
+      expect(card).toContain("Card");
+      expect(card).toContain("from \"@/components/ui/Card\"");
     });
   });
 
@@ -120,7 +121,7 @@ describe("Iteration 2 — Task CRUD UI", () => {
     it("should have title input, description textarea, status dropdown", () => {
       const form = readFileSync(join(ROOT, "src/components/dashboard/TaskForm.tsx"), "utf-8");
       expect(form).toContain('type="text"');
-      expect(form).toContain("textarea");
+      expect(form).toContain("Textarea");
       expect(form).toContain("select");
     });
 
@@ -134,7 +135,7 @@ describe("Iteration 2 — Task CRUD UI", () => {
       const form = readFileSync(join(ROOT, "src/components/dashboard/TaskForm.tsx"), "utf-8");
       expect(form).toContain("Title is required");
       expect(form).toContain("titleError");
-      expect(form).toContain("border-red-500");
+      expect(form).toContain("error={titleError}");
     });
 
     it("should support Escape to cancel and Cmd+Enter to save", () => {
@@ -159,9 +160,10 @@ describe("Iteration 2 — Task CRUD UI", () => {
       expect(empty).toContain("onCreateTask");
     });
 
-    it("should have green gradient CTA button", () => {
+    it("should have CTA button via Button component", () => {
       const empty = readFileSync(join(ROOT, "src/components/dashboard/EmptyState.tsx"), "utf-8");
-      expect(empty).toContain("#00D67E");
+      expect(empty).toContain("Button");
+      expect(empty).toContain('variant="primary"');
     });
   });
 

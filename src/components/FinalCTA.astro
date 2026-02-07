@@ -1,12 +1,10 @@
 ---
+import GradientOrbs from "./ui/GradientOrbs.astro";
+import Button from "./ui/Button.astro";
 ---
 
 <section id="cta" class="relative py-[var(--spacing-section-desktop)] max-md:py-[var(--spacing-section-mobile)] overflow-hidden">
-  <!-- Background orbs (callback to hero) -->
-  <div class="cta-orbs" aria-hidden="true">
-    <div class="cta-orb cta-orb-green"></div>
-    <div class="cta-orb cta-orb-orange"></div>
-  </div>
+  <GradientOrbs variant="cta" />
 
   <div class="container-content relative z-10 text-center">
     <h2 class="text-display mb-8" data-cta-reveal>
@@ -14,10 +12,10 @@
     </h2>
 
     <div data-cta-reveal>
-      <a href="/dashboard" class="cta-button-lg" data-cursor-hover>
+      <Button variant="primary" size="lg" href="/dashboard" data-cursor-hover>
         Go to Dashboard
         <span aria-hidden="true">&rarr;</span>
-      </a>
+      </Button>
     </div>
 
     <p class="text-sm text-text-secondary mt-6" data-cta-reveal>
@@ -26,82 +24,20 @@
   </div>
 </section>
 
-<style>
-  .cta-orbs {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .cta-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-  }
-
-  .cta-orb-green {
-    width: 500px;
-    height: 500px;
-    background: #00D67E;
-    top: -20%;
-    left: 10%;
-    opacity: 0.15;
-  }
-
-  .cta-orb-orange {
-    width: 400px;
-    height: 400px;
-    background: #FF6B35;
-    bottom: -20%;
-    right: 10%;
-    opacity: 0.12;
-  }
-
-  .cta-button-lg {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1.125rem 3rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--color-dark-base);
-    background: var(--color-green-primary);
-    border-radius: 12px;
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 0 40px rgba(0, 214, 126, 0.3);
-  }
-
-  .cta-button-lg:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 60px rgba(0, 214, 126, 0.5);
-  }
-</style>
-
 <script>
+  import { scrollStagger, registerGSAP, prefersReducedMotion } from "@/utils/animations";
   import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger);
+  registerGSAP();
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!prefersReducedMotion) {
-    gsap.from("[data-cta-reveal]", {
-      scrollTrigger: {
-        trigger: "#cta",
-        start: "top 70%",
-      },
-      opacity: 0,
-      y: 30,
+  if (!prefersReducedMotion()) {
+    scrollStagger("[data-cta-reveal]", {
+      trigger: "#cta" as unknown as Element,
       stagger: 0.15,
-      duration: 0.8,
-      ease: "power3.out",
     });
 
     // Parallax orbs on scroll
-    gsap.to(".cta-orb-green", {
+    gsap.to(".gradient-orbs-container .gradient-orb:nth-child(1)", {
       scrollTrigger: {
         trigger: "#cta",
         start: "top bottom",
@@ -112,7 +48,7 @@
       ease: "none",
     });
 
-    gsap.to(".cta-orb-orange", {
+    gsap.to(".gradient-orbs-container .gradient-orb:nth-child(2)", {
       scrollTrigger: {
         trigger: "#cta",
         start: "top bottom",

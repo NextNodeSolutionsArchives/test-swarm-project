@@ -30,9 +30,9 @@ describe("FR-10: Navbar Auth State", () => {
       expect(component).toContain("/dashboard");
     });
 
-    it("has authenticated state with avatar showing initials", () => {
-      expect(component).toContain("navbar-avatar");
-      expect(component).toContain("getInitials");
+    it("has authenticated state with avatar via Avatar component", () => {
+      expect(component).toContain("Avatar");
+      expect(component).toContain("user.username");
     });
 
     it("has authenticated state with username display", () => {
@@ -40,19 +40,19 @@ describe("FR-10: Navbar Auth State", () => {
       expect(component).toContain("user.username");
     });
 
-    it("has dropdown menu with role=menu", () => {
-      expect(component).toContain('role="menu"');
-      expect(component).toContain("navbar-dropdown");
+    it("has dropdown menu via DropdownMenu component", () => {
+      expect(component).toContain("DropdownMenu");
+      expect(component).toContain("items={[");
     });
 
-    it("has dropdown toggle with aria-expanded", () => {
-      expect(component).toContain("aria-expanded");
+    it("has dropdown trigger with aria-haspopup", () => {
       expect(component).toContain("aria-haspopup");
+      expect(component).toContain("navbar-avatar-btn");
     });
 
-    it("has Profile item (disabled)", () => {
-      expect(component).toContain("Profile");
-      expect(component).toContain("navbar-dropdown-disabled");
+    it("has user info item in dropdown", () => {
+      expect(component).toContain("user.username");
+      expect(component).toContain("label:");
     });
 
     it("has Logout button", () => {
@@ -60,19 +60,19 @@ describe("FR-10: Navbar Auth State", () => {
       expect(component).toContain("handleLogout");
     });
 
-    it("closes dropdown on click outside", () => {
-      expect(component).toContain("handleClickOutside");
-      expect(component).toContain("mousedown");
+    it("delegates dropdown close behavior to DropdownMenu component", () => {
+      // Click-outside and Escape handling are now internal to DropdownMenu
+      expect(component).toContain("DropdownMenu");
     });
 
-    it("closes dropdown on Escape key", () => {
-      expect(component).toContain("Escape");
-      expect(component).toContain("handleEscape");
+    it("delegates Escape key handling to DropdownMenu component", () => {
+      // Escape handling is now internal to DropdownMenu
+      expect(component).toContain("DropdownMenu");
     });
 
-    it("shows user email in dropdown header", () => {
-      expect(component).toContain("navbar-dropdown-email");
-      expect(component).toContain("user.email");
+    it("shows username in dropdown items", () => {
+      expect(component).toContain("user.username");
+      expect(component).toContain("label:");
     });
 
     it("reloads page after logout", () => {
@@ -96,8 +96,8 @@ describe("FR-10: Navbar Auth State", () => {
       expect(component).toContain("navbar-mobile-logout");
     });
 
-    it("has avatar with larger size for mobile", () => {
-      expect(component).toContain("navbar-avatar-lg");
+    it("has avatar with larger size for mobile via Avatar component", () => {
+      expect(component).toContain('size="lg"');
     });
   });
 
